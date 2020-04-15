@@ -20,10 +20,19 @@ namespace CardPlayer.DAL
         public IEnumerable<UserCard> getUserCards(int gameId, string userId)
         {
             // Get users cards if user already has been invited to the game.
-            var cards = _context.UserCards.Select(userCard => userCard.UserId == userId && userCard.GameId == gameId);
+            var cards = _context.UserCards.Where(userCard => userCard.GameId == gameId && userCard.UserId == userId);
 
+            if (cards.Any())
+            {
+                return cards;
+            }
+            
+            
             // Get new cards for user excluding all other cards that other users are using.
-            return cards.All();
+            //var takenCards = _context.UserCards.Select((cardId)).Where(userCard => userCard.GameId == gameId);
+            
+            
+            return cards;
         }
         
     }
