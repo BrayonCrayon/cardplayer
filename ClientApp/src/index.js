@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import {Router } from 'react-router';
 import App from './App';
 import createStore from "./store/configureStore";
 import {Provider} from "react-redux";
@@ -14,9 +13,9 @@ const store = createStore;
 
 ReactDOM.render(
   <BrowserRouter  basename={baseUrl}>
-          <Provider store={store}>
-            <App />
-          </Provider>
+      <Provider store={store}>
+        <App />
+      </Provider>
   </BrowserRouter>,
   document.getElementById('root')
 );

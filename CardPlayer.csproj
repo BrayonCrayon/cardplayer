@@ -40,9 +40,11 @@
     <Content Include="ClientApp\src\components\Game\GameMenu.js" />
     <Content Include="ClientApp\src\components\Game\GamePlayers.js" />
     <Content Include="ClientApp\src\constants\authConstants.js" />
+    <Content Include="ClientApp\src\constants\cardConstants.js" />
     <Content Include="ClientApp\src\constants\gameConstants.js" />
     <Content Include="ClientApp\src\middleware\logger.js" />
     <Content Include="ClientApp\src\reducers\authReducer.js" />
+    <Content Include="ClientApp\src\reducers\cardReducer.js" />
     <Content Include="ClientApp\src\reducers\gameReducer.js" />
     <Content Include="ClientApp\src\reducers\monitorReducer.js" />
     <Content Include="ClientApp\src\reducers\rootReducer.js" />

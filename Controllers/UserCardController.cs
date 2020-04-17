@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using CardPlayer.DAL;
+using CardPlayer.DTOs;
 using CardPlayer.Models;
-using CardPlayer.Services;
+using CardPlayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -10,9 +11,9 @@ namespace CardPlayer.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/cards")]
     [Produces("application/json")]
-    public class UserCardController
+    public class UserCardController : ControllerBase
     {
         private readonly UserCardDal _userCardDal;
 
@@ -22,10 +23,24 @@ namespace CardPlayer.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<UserCard> getCards([FromBody] UserCardViewModel userCardVm)
+        public UserHandDto Get([FromQuery] UserCardViewModel userCardVm)
         {
-            return _userCardDal.getUserCards(userCardVm.gameId, userCardVm.userId);
+            return _userCardDal.GetUserCards(userCardVm);
         }
+
+        [HttpPut]
+        public int SelectCards([FromBody] UserCardViewModel userCardVm)
+        {
+            return _userCardDal.SelectUserCards(userCardVm);
+        }
+
+        [HttpDelete]
+        public IEnumerable<UserCard> DeleteCards([FromBody] UserCardViewModel userCardVm)
+        {
+            var cardsDeleted = _userCardDal.SoftDeleteUserCards(userCardVm);
+            return cardsDeleted < 1 ? _userCardDal.GrabNewUserCards(userCardVm) : new List<UserCard>();
+        }
+        
 
     }
 }

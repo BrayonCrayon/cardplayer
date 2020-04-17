@@ -43,6 +43,7 @@ namespace CardPlayer
             services.AddRazorPages();
             
             services.AddTransient<GameDal>();
+            services.AddTransient<UserCardDal>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

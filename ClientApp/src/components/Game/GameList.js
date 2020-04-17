@@ -1,7 +1,7 @@
 ﻿import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchGames, selectGame} from "../../actions/gameActions";
-import {GameItem} from "./GameItem";
+import GameItem from "./GameItem";
 
 export const GameList = () => {
     const dispatch = useDispatch();

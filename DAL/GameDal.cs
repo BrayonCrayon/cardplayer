@@ -3,6 +3,7 @@ using System.Linq;
 using CardPlayer.Data;
 using CardPlayer.Helpers;
 using CardPlayer.Models;
+using CardPlayer.ViewModels;
 
 namespace CardPlayer.DAL
 {
@@ -25,6 +26,13 @@ namespace CardPlayer.DAL
         public Game GetGameByName(string name)
         {
                 return _context.Games.FirstOrDefault(g => g.Name.Equals(name));
+        }
+
+        public bool IsUserTurn(GameViewModel gameVm)
+        {
+            return _context.GameUsers
+                .Single(gUser => gUser.GameId == gameVm.gameId && gUser.UserId == gameVm.userId)
+                .IsTurn;
         }
         
         public Game StoreGame()

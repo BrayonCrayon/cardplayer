@@ -1,19 +1,23 @@
-﻿import React, {useCallback} from 'react';
+﻿import React, {useCallback, useEffect} from 'react';
 import { GamePlayers } from "./GamePlayers";
 import {useDispatch, useSelector, connect} from 'react-redux';
-import {addGame, selectGame} from "../../actions/gameActions";
+import {addGame, checkUserTurn, selectGame} from "../../actions/gameActions";
+import {resetCards} from "../../actions/cardActions";
 
 const GameMenu = (props) => {
     const user = useSelector(state => state.authReducer.user);
     const token = useSelector(state => state.authReducer.token);
     const dispatch = useDispatch();
+
+
     
     const createGame = useCallback( () => {
         addGame(user.sub, token)(dispatch);
-    }, [user]);
+    }, [user, token, props.game]);
     
     const leaveGame = useCallback(() => {
-        selectGame({})(dispatch);
+        selectGame({game: {}})(dispatch);
+        resetCards()(dispatch);
     }, []);
     
     const showPlayerControls = () => {

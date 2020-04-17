@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CardPlayer.DAL;
 using CardPlayer.Models;
-using CardPlayer.Services;
+using CardPlayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +18,12 @@ namespace CardPlayer.Controllers
         public GameController(GameDal gameDal)
         {
             _gameDal = gameDal;
+        }
+        
+        [HttpGet("is-turn")]
+        public ActionResult<bool> IsUserTurn([FromQuery] GameViewModel gameVm)
+        {
+            return _gameDal.IsUserTurn(gameVm);
         }
         
         [HttpGet]

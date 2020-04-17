@@ -4,6 +4,7 @@ import * as actions from "../constants/gameConstants";
 const initialState = {
     games: [],
     game: {},
+    isTurn: false,
     pending: false,
     error: null,
 };
@@ -50,6 +51,23 @@ export default function gameReducer(state = initialState, action) {
             return {
                 ...state,
                 game: action.game,
+            };
+        case actions.CHECK_USER_TURN_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case actions.CHECK_USER_TURN_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                isTurn: action.isTurn,
+            };
+        case actions.CHECK_USER_TURN_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                pending: false,
             };
         default:
             return state;

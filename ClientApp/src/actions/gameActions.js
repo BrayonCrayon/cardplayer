@@ -1,33 +1,25 @@
 ﻿
 
-import { 
-    ADD_GAME_PENDING, 
-    ADD_GAME_SUCCESS, 
-    ADD_GAME_FAILURE, 
-    FETCH_GAMES_PENDING, 
-    FETCH_GAMES_SUCCESS, 
-    FETCH_GAMES_FAILURE, 
-    SET_GAME 
-} from "../constants/gameConstants";
+import * as gameConstants from "../constants/gameConstants";
 import Axios from "axios";
 
 // ADDING GAMES
 export function addGamePending() {
     return {
-        type: ADD_GAME_PENDING
+        type: gameConstants.ADD_GAME_PENDING
     }
 }
 
 export function addGameSuccess(game) {
     return {
-        type: ADD_GAME_SUCCESS,
+        type: gameConstants.ADD_GAME_SUCCESS,
         game: game
     }
 }
 
 export function addGameFailure(error) {
     return {
-        type: ADD_GAME_FAILURE,
+        type: gameConstants.ADD_GAME_FAILURE,
         error: error
     }
 }
@@ -44,6 +36,11 @@ export const addGame = (userId, token) => {
                 }
             });
             dispatch(addGameSuccess(data));
+            dispatch(checkUserTurn({
+                userId,
+                token,
+                gameId: data.id,
+            }))
         } catch (error) {
             console.error(error);
             dispatch(addGameFailure(error));
@@ -54,14 +51,23 @@ export const addGame = (userId, token) => {
 // Set Game
 export function setGame(game) {
     return {
-        type: SET_GAME,
+        type: gameConstants.SET_GAME,
         game: game,
     }
 }
 
-export const selectGame = (game) => {
+export const selectGame = (payload) => {
     return dispatch => {
-        dispatch(setGame(game));
+        dispatch(setGame(payload.game));
+        
+        if (Object.keys(payload.game).length > 0)
+        {
+            dispatch(checkUserTurn({
+                gameId: payload.game.id,
+                userId: payload.userId,
+                token: payload.token,
+            }));
+        }
     }
 };
 
@@ -69,20 +75,20 @@ export const selectGame = (game) => {
 // fetching games
 export function fetchGamesPending() {
     return {
-        type: FETCH_GAMES_PENDING
+        type: gameConstants.FETCH_GAMES_PENDING
     }
 }
 
 export function fetchGamesSuccess(games) {
     return {
-        type: FETCH_GAMES_SUCCESS,
+        type: gameConstants.FETCH_GAMES_SUCCESS,
         games: games
     }
 }
 
 export function fetchGamesFailure(error) {
     return {
-        type: FETCH_GAMES_FAILURE,
+        type: gameConstants.FETCH_GAMES_FAILURE,
         error: error
     }
 }
@@ -108,6 +114,47 @@ export const fetchGames = (userId, token) => {
     }
 };
 
+// Check user turn
+export function checkUserTurnPending() {
+    return {
+        type: gameConstants.CHECK_USER_TURN_PENDING,
+    }
+}
+
+export function checkUserTurnSuccess(isTurn) {
+    return {
+        type: gameConstants.CHECK_USER_TURN_SUCCESS,
+        isTurn: isTurn,
+    }
+}
+
+export function checkUserTurnFailure(error) {
+    return {
+        type: gameConstants.CHECK_USER_TURN_FAILURE,
+        error: error,
+    }
+}
+
+export const checkUserTurn = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(checkUserTurnPending());
+            const {data} = await Axios.get("/api/game/is-turn", {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+                params: {
+                    userId: payload.userId,
+                    gameId: payload.gameId,
+                }
+            });
+            dispatch(checkUserTurnSuccess(data));
+        }      
+        catch (error) {
+            dispatch(checkUserTurnFailure(error));
+        }
+    }
+};
 
 //
 // export function removeGame(payload) {
