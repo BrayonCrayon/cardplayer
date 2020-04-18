@@ -1,9 +1,14 @@
 ﻿import React, {useCallback, useEffect} from 'react';
 import {connect, useDispatch} from "react-redux";
-import {getCards} from "../../../actions/cardActions";
+import {getCards, selectCards} from "../../../actions/cardActions";
+import WhiteCard from "./WhiteCard";
 
 const PlayerCards = (props) => {
     const dispatch = useDispatch();
+    
+    const onSelect = useCallback((card) => {
+        selectCards(card.id)(dispatch);
+    }, []);
     
     useEffect(() => {
         getCards({
@@ -13,29 +18,15 @@ const PlayerCards = (props) => {
         })(dispatch);
     }, [props.game, props.userId, props.token]);
     
-    const showCards = () => {
-        if (props.whiteCards.length > 0) {
-            return props.whiteCards.map(whiteCard => (
-                <div key={whiteCard.id} className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        <div dangerouslySetInnerHTML={{__html: whiteCard.card.text }} />
-                    </div>
-                </div>
-            ))
-        }
-        
-        return (
-            <div className="text-lg text-center">
-                No Cards Available
-            </div>
-        )
-    };
-    
-    
     return (
         <div className="flex flex-wrap w-full justify-around">
-            {
-                showCards()
+            {props.whiteCards.length && props.whiteCards.map(whiteCard => (
+                <WhiteCard card={whiteCard} key={whiteCard.id} disabled={props.isTurn} onSelect={onSelect} />
+            ))}
+            {!props.whiteCards.length && 
+                <div className="text-lg text-center">
+                    No Cards Available
+                </div>
             }
         </div>
     );
@@ -46,6 +37,7 @@ const mapStateToProps = state => ({
     game: state.gameReducer.game,
     token: state.authReducer.token,
     userId: state.authReducer.user.sub,
+    isTurn: state.gameReducer.isTurn,
 });
 
 export default connect(mapStateToProps)(PlayerCards);

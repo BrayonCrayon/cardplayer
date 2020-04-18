@@ -1,5 +1,6 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
+import {Card} from "reactstrap";
 
 export function getCardPending() {
     return {
@@ -46,17 +47,40 @@ export const getCards = (payload) => {
     }
 };
 
+// Reset cards
 export function resetCardsAction() {
     return {
         type: cardConstants.RESET_CARDS,
     }
 }
 
-
 export const resetCards = () => {
     return async dispatch => {
         dispatch(resetCardsAction());
     }
+};
+
+// Select Card
+export function selectCardAction(cardId) {
+    return {
+        type: cardConstants.SELECT_CARD,
+        cardId: cardId,
+    }
+}
+
+export const selectCards = (cardId) => {
+    return async dispatch => {
+        dispatch(selectCardAction(cardId));
+    }  
+};
+
+export const selectWhiteCard = (whiteCards, Id) => {
+    whiteCards.forEach(card => {
+        if (card.id === Id) {
+            card.selected = !card.selected;
+            return;
+        }
+    });
 };
 
 

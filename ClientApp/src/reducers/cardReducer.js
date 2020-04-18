@@ -1,4 +1,5 @@
 ﻿import * as actions from '../constants/cardConstants';
+import {selectWhiteCard} from "../actions/cardActions";
 
 const initialState = {
     blackCard: {},
@@ -33,6 +34,9 @@ export default function cardReducer(state = initialState, action) {
                 whiteCards: [],
                 blackCard: {},
             };
+        case actions.SELECT_CARD:
+            selectWhiteCard(state.whiteCards, action.cardId);
+            return state;
         default:
             return state;
     }

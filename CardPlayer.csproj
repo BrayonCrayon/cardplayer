@@ -34,6 +34,7 @@
     <Content Include="ClientApp\src\ApiCalls\GameApiCalls.js" />
     <Content Include="ClientApp\src\components\Game\Cards\BlackCard.js" />
     <Content Include="ClientApp\src\components\Game\Cards\PlayerCards.js" />
+    <Content Include="ClientApp\src\components\Game\Cards\WhiteCard.js" />
     <Content Include="ClientApp\src\components\Game\Game.js" />
     <Content Include="ClientApp\src\components\Game\GameItem.js" />
     <Content Include="ClientApp\src\components\Game\GameList.js" />

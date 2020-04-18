@@ -8,5 +8,7 @@ export const GET_CARDS_FAILURE = "GET_CARDS_FAILURE";
 
 export const RESET_CARDS = "RESET_CARDS";
 
+export const SELECT_CARD = "SELECT_CARD";
+
 
 
