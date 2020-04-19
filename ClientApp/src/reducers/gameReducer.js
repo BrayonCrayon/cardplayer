@@ -69,6 +69,24 @@ export default function gameReducer(state = initialState, action) {
                 error: action.error,
                 pending: false,
             };
+        case actions.JOIN_GAME_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null,
+            };
+        case actions.JOIN_GAME_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                game: action.game,
+            };
+        case actions.JOIN_GAME_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
         default:
             return state;
     }

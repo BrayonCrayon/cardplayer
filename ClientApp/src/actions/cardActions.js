@@ -1,6 +1,5 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
-import {Card} from "reactstrap";
 
 export function getCardPending() {
     return {
@@ -98,4 +97,96 @@ export const incrementSelectedCardCount = (value) => {
     return async dispatch => {
         dispatch(setSelectedCardCountAction(value));
     } 
+};
+
+// Call api call to select cards
+
+export function sendSelectedCardsPending() {
+    return {
+        type: cardConstants.SEND_SELECTED_CARDS_PENDING,
+    };
+}
+
+export function sendSelectedCardsSuccess(playerSelectedCards) {
+    return {
+        type: cardConstants.SEND_SELECTED_CARDS_SUCCESS,
+        playerSelectedCards,
+    };
+}
+
+export function sendSelectedCardsFailure(error) {
+    return {
+        type: cardConstants.SEND_SELECTED_CARDS_FAILURE,
+        error,
+    };
+}
+
+export const sendSelectCards = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(sendSelectedCardsPending());
+            const {data} = await Axios.put(`/api/cards`, {
+                cardIds: payload.cardIds,
+                userId: payload.userId,
+                gameId: payload.gameId,
+            },{
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                }
+            });
+            
+            if (data) {
+                dispatch(sendSelectedCardsSuccess(data));
+            } else {
+                dispatch(sendSelectedCardsFailure(data));
+            }
+        } catch (error)
+        {
+            dispatch(sendSelectedCardsFailure(error));
+        }
+    }
+};
+
+
+// Check if any cards were already selected 
+
+export function checkAnyCardsSelectedPending() {
+    return {
+        type: cardConstants.CHECK_ANY_CARDS_SELECTED_PENDING
+    };
+}
+
+export function checkAnyCardsSelectedSuccess(playerSelectedCards) {
+    return {
+        type: cardConstants.CHECK_ANY_CARDS_SELECTED_SUCCESS,
+        playerSelectedCards,
+    }
+}
+
+export function checkAnyCardsSelectedFailure(error) {
+    return {
+        type: cardConstants.CHECK_ANY_CARDS_SELECTED_FAILURE,
+        error,
+    }
+}
+
+export const checkAnyCardsSelected = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(checkAnyCardsSelectedPending());
+            const {data} = await Axios.get(`/api/cards/any-selected-cards`, {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+                params: {
+                    userId: payload.userId,
+                    gameId: payload.gameId,
+                }
+            })
+            dispatch(checkAnyCardsSelectedSuccess(data));
+        } catch (error)
+        {
+            dispatch(checkAnyCardsSelectedFailure(error));
+        }
+    }
 };

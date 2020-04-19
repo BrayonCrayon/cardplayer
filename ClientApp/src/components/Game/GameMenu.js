@@ -1,26 +1,30 @@
 ﻿import React, {useCallback, useEffect, useMemo} from 'react';
 import { GamePlayers } from "./GamePlayers";
 import {useDispatch, useSelector, connect} from 'react-redux';
-import {addGame, checkUserTurn, selectGame} from "../../actions/gameActions";
-import {resetCards} from "../../actions/cardActions";
+import {addGame, checkUserTurn, joinGame, selectGame} from "../../actions/gameActions";
+import {resetCards, sendSelectCards} from "../../actions/cardActions";
 import Swal from "sweetalert2";
+import {JoinGameModal} from "../Modals/JoinGameModal";
 
-const GameMenu = ({selectedCardCount, blackCard, game}) => {
+const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelectedCards}) => {
     const user = useSelector(state => state.authReducer.user);
     const token = useSelector(state => state.authReducer.token);
     const dispatch = useDispatch();
 
-
     const selectCardsBtnClasses = useMemo( () => {
-        return Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed";
+        return Object.keys(blackCard).length > 0 && playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-gray-500";
     }, [selectedCardCount, blackCard]);
     
     const createGame = useCallback( () => {
         addGame(user.sub, token)(dispatch);
     }, [user, token, game]);
     
-    const joinGame = useCallback(() => {
-        
+    const join = useCallback((name) => {
+        joinGame({
+            userId: user.sub,
+            gameName: name,
+            token,
+        })(dispatch);
     }, [user, token]);
     
     const leaveGame = useCallback(() => {
@@ -43,10 +47,14 @@ const GameMenu = ({selectedCardCount, blackCard, game}) => {
     const selectCards = useCallback(() => {
         if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick)
         {
-            // TODO: call api to select whitecards
-            console.log("here");
+            sendSelectCards({
+                gameId: game.id,
+                userId: user.sub,
+                token,
+                cardIds: whiteCards.filter(wc => wc.selected).map(wc => wc.card.id),
+            })(dispatch);
         }
-    }, [selectedCardCount, blackCard]);
+    }, [selectedCardCount, blackCard, user, token, whiteCards, game.id]);
     
     const showPlayerControls = () => {
         return (
@@ -73,7 +81,7 @@ const GameMenu = ({selectedCardCount, blackCard, game}) => {
         return (
             <div className="flex justify-around py-2">
                 <button onClick={createGame} className="primary" >Create Game</button>
-                <button onClick={joinGame} className="primary" >Join Game</button>
+                <JoinGameModal buttonLabel="Join Game" title="Enter A Game Name" confirmBtnLabel="Join" inputLabel="Name" confirmCallback={join}/>
             </div>
         );
     };
@@ -99,6 +107,8 @@ const mapStateToProps = state => ({
     game: state.gameReducer.game, 
     blackCard: state.cardReducer.blackCard,
     selectedCardCount: state.cardReducer.selectedCards,
+    whiteCards: state.cardReducer.whiteCards,
+    playerSelectedCards: state.cardReducer.playerSelectedCards,
 });
 
 export default connect(mapStateToProps)(GameMenu);

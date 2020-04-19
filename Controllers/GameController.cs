@@ -33,9 +33,9 @@ namespace CardPlayer.Controllers
         }
 
         [HttpGet("join")]
-        public ActionResult<Game> JoinGame([FromBody] GameViewModel gameVm)
+        public ActionResult<Game> JoinGame([FromQuery] GameViewModel gameVm)
         {
-            var game = _gameDal.GetGameByName(gameVm.game.Name);
+            var game = _gameDal.GetGameByName(gameVm.gameName);
 
              if (game == null)
              {

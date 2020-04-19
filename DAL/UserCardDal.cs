@@ -6,6 +6,7 @@ using CardPlayer.DTOs;
 using CardPlayer.Models;
 using CardPlayer.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CardPlayer.DAL
 {
@@ -161,8 +162,23 @@ namespace CardPlayer.DAL
             return cardsInHand;
         }
         
-        public int SelectUserCards(UserCardViewModel userCardVm)
+        public bool AnyCardsSelected(string userId, int gameId)
         {
+            var selectedCards = _context.UserCards
+                .Where(userCard => userCard.GameId == gameId)
+                .Where(userCard => userCard.UserId == userId)
+                .Where(uCard => uCard.Selected);
+
+            return selectedCards.Any();
+        }
+        
+        public bool SelectUserCards(UserCardViewModel userCardVm)
+        {
+            if (AnyCardsSelected(userCardVm.userId, userCardVm.gameId))
+            {
+                return true;
+            }
+            
             foreach (var cardId in userCardVm.cardIds)
             {
                 try
@@ -175,11 +191,11 @@ namespace CardPlayer.DAL
                 }
                 catch (Exception)
                 {
-                    return -1;
+                    return false;
                 }
             }
 
-            return 1;
+            return true;
         }
         
         public int SoftDeleteUserCards(UserCardViewModel userCardVm)

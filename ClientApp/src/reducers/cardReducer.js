@@ -5,6 +5,7 @@ const initialState = {
     blackCard: {},
     whiteCards: [],
     selectedCards: 0,
+    playerSelectedCards: false,
     pending: false,
     error: null,  
 };
@@ -35,6 +36,7 @@ export default function cardReducer(state = initialState, action) {
                 whiteCards: [],
                 blackCard: {},
                 selectedCards: 0,
+                playerSelectedCards: false,
             };
         case actions.SELECT_CARD:
             return {
@@ -45,6 +47,43 @@ export default function cardReducer(state = initialState, action) {
             return {
                 ...state,
                 selectedCards: state.selectedCards += action.value,  
+            };
+        case actions.SEND_SELECTED_CARDS_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null,
+            };
+        case actions.SEND_SELECTED_CARDS_SUCCESS:
+            return {
+                ...state,
+                playerSelectedCards: action.playerSelectedCards,
+                pending: false,
+            };
+        case actions.SEND_SELECTED_CARDS_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
+        case actions.CHECK_ANY_CARDS_SELECTED_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null,
+            };
+        case actions.CHECK_ANY_CARDS_SELECTED_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                playerSelectedCards: action.playerSelectedCards,
+                error: null,
+            };
+        case actions.CHECK_ANY_CARDS_SELECTED_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
             };
         default:
             return state;

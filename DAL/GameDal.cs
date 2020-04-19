@@ -49,6 +49,14 @@ namespace CardPlayer.DAL
         
         public void AddUserToGame(int gameId, string userId, bool isTurn = false, bool isHost = false)
         {
+            var inGameAlready =
+                _context.GameUsers.SingleOrDefault(gUser => gUser.UserId == userId && gUser.GameId == gameId);
+
+            if (inGameAlready != null)
+            {
+                return;
+            }
+            
             _context.GameUsers.Add(new GameUser
             {
                 GameId = gameId,

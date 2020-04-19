@@ -27,9 +27,15 @@ namespace CardPlayer.Controllers
         {
             return _userCardDal.GetUserCards(userCardVm);
         }
+        
+        [HttpGet("any-selected-cards")]
+        public ActionResult<bool> AnyCardsSelected([FromQuery] UserCardViewModel userCardVm)
+        {
+            return _userCardDal.AnyCardsSelected(userCardVm.userId, userCardVm.gameId);
+        }
 
         [HttpPut]
-        public int SelectCards([FromBody] UserCardViewModel userCardVm)
+        public ActionResult<bool> SelectCards([FromBody] UserCardViewModel userCardVm)
         {
             return _userCardDal.SelectUserCards(userCardVm);
         }
