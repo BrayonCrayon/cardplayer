@@ -1,6 +1,6 @@
 ﻿import React, {useCallback, useEffect} from 'react';
 import {connect, useDispatch} from "react-redux";
-import {getCards, selectCards} from "../../../actions/cardActions";
+import {getCards, incrementSelectedCardCount, selectCards} from "../../../actions/cardActions";
 import WhiteCard from "./WhiteCard";
 
 const PlayerCards = (props) => {
@@ -8,6 +8,7 @@ const PlayerCards = (props) => {
     
     const onSelect = useCallback((card) => {
         selectCards(card.id)(dispatch);
+        incrementSelectedCardCount(card.selected ? 1 : -1)(dispatch);
     }, []);
     
     useEffect(() => {
@@ -21,7 +22,7 @@ const PlayerCards = (props) => {
     return (
         <div className="flex flex-wrap w-full justify-around">
             {props.whiteCards.length && props.whiteCards.map(whiteCard => (
-                <WhiteCard card={whiteCard} key={whiteCard.id} disabled={props.isTurn} onSelect={onSelect} />
+                <WhiteCard card={whiteCard} key={whiteCard.id} disabled={props.isTurn} selected={whiteCard.selected} onSelect={onSelect} />
             ))}
             {!props.whiteCards.length && 
                 <div className="text-lg text-center">

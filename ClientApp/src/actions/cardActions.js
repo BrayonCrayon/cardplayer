@@ -81,6 +81,21 @@ export const selectWhiteCard = (whiteCards, Id) => {
             return;
         }
     });
+    return whiteCards;
 };
 
 
+// Increment selected card count
+
+export function setSelectedCardCountAction(value) {
+    return {
+        type: cardConstants.SET_SELECTED_CARD_COUNT,
+        value: value
+    }
+}
+
+export const incrementSelectedCardCount = (value) => {
+    return async dispatch => {
+        dispatch(setSelectedCardCountAction(value));
+    } 
+};

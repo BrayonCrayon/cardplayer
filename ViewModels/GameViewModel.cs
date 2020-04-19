@@ -10,6 +10,7 @@ namespace CardPlayer.ViewModels
     {
         public string userId { get; set; }
         public int gameId { get; set; }
+        public string gameName { get; set; }
         public GameDto game { get; set; }
 
 

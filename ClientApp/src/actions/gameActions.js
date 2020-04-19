@@ -156,21 +156,47 @@ export const checkUserTurn = (payload) => {
     }
 };
 
-//
-// export function removeGame(payload) {
-//     return {
-//         type: REMOVE_GAME,
-//         payload,
-//     }
-// }
-//
-// export function getGame(payload) {
-//     return {
-//         type: GET_GAME,  
-//         payload
-//     };
-// }
+// Join game action
+export function joinGamePending() {
+    return {
+        type: gameConstants.JOIN_GAME_PENDING
+    }
+}
 
+export function joinGameSuccess(game) {
+    return {
+        type: gameConstants.JOIN_GAME_SUCCESS,
+        game: game,
+    }
+}
+
+export function joinGameFailure(error) {
+    return {
+        type: gameConstants.JOIN_GAME_FAILURE,
+        error: error,
+    }
+}
+
+export const joinGame = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(joinGamePending());
+            const {data} = await Axios.get(`/api/game/join`, {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+                params: {
+                    userId: payload.userId,
+                    gameName: payload.gameName,
+                }
+            });
+            dispatch(joinGameSuccess(data));
+        } catch (error)
+        {
+            dispatch(joinGameFailure(error));
+        }
+    }
+};
 
 export default {
     addGamePending,

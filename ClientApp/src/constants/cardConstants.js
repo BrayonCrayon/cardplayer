@@ -10,5 +10,7 @@ export const RESET_CARDS = "RESET_CARDS";
 
 export const SELECT_CARD = "SELECT_CARD";
 
+export const SET_SELECTED_CARD_COUNT = "SET_SELECTED_CARD_COUNT";
+
 
 

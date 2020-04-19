@@ -4,6 +4,7 @@ import {selectWhiteCard} from "../actions/cardActions";
 const initialState = {
     blackCard: {},
     whiteCards: [],
+    selectedCards: 0,
     pending: false,
     error: null,  
 };
@@ -33,10 +34,18 @@ export default function cardReducer(state = initialState, action) {
                 ...state,
                 whiteCards: [],
                 blackCard: {},
+                selectedCards: 0,
             };
         case actions.SELECT_CARD:
-            selectWhiteCard(state.whiteCards, action.cardId);
-            return state;
+            return {
+                ...state,
+                whiteCards: Object.assign([], selectWhiteCard(state.whiteCards, action.cardId)),
+            };
+        case actions.SET_SELECTED_CARD_COUNT:
+            return {
+                ...state,
+                selectedCards: state.selectedCards += action.value,  
+            };
         default:
             return state;
     }
