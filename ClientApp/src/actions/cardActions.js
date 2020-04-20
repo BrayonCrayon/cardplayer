@@ -128,7 +128,7 @@ export const sendSelectCards = (payload) => {
             const {data} = await Axios.put(`/api/cards`, {
                 cardIds: payload.cardIds,
                 userId: payload.userId,
-                gameId: payload.gameId,
+                gameId: payload.game.id,
             },{
                 headers: {
                     Authorization: `Bearer ${payload.token}`,
@@ -137,6 +137,7 @@ export const sendSelectCards = (payload) => {
             
             if (data) {
                 dispatch(sendSelectedCardsSuccess(data));
+                window.gameHub.playerSelectedCardsNotify(payload.game.name);
             } else {
                 dispatch(sendSelectedCardsFailure(data));
             }
@@ -182,11 +183,59 @@ export const checkAnyCardsSelected = (payload) => {
                     userId: payload.userId,
                     gameId: payload.gameId,
                 }
-            })
+            });
             dispatch(checkAnyCardsSelectedSuccess(data));
+            if (data) {
+                dispatch(getSelectedPlayerCards({
+                    token: payload.token,
+                    gameId: payload.gameId,
+                }));
+            }
         } catch (error)
         {
             dispatch(checkAnyCardsSelectedFailure(error));
+        }
+    }
+};
+
+// Get Player selected Cards
+export function getSelectedPlayerCardsPending() {
+    return {
+        type: cardConstants.GET_SELECTED_PLAYER_CARDS_PENDING,
+    }
+}
+
+export function getSelectedPlayerCardsSuccess(selectedCards) {
+    return {
+        type: cardConstants.GET_SELECTED_PLAYER_CARDS_SUCCESS,
+        selectedCards
+    }
+}
+
+export function getSelectedPlayerCardsFailure(error) {
+    return {
+        type: cardConstants.GET_SELECTED_PLAYER_CARDS_FAILURE,
+        error,
+    }
+}
+
+export const getSelectedPlayerCards = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(getSelectedPlayerCardsPending());
+            const {data} = await Axios.get(`/api/cards/selected-cards`, {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+                params: {
+                    gameId: payload.gameId,
+                }
+            });
+            console.log(data);
+            dispatch(getSelectedPlayerCardsSuccess(data));
+        } catch (error)
+        {
+            dispatch(getSelectedPlayerCardsFailure(error));
         }
     }
 };

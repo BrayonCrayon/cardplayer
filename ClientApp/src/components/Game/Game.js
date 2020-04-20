@@ -1,4 +1,4 @@
-﻿import React, { useEffect} from 'react';
+﻿import React, {useCallback, useEffect} from 'react';
 import GameMenu from "./GameMenu";
 import PlayerCards from "./Cards/PlayerCards";
 import BlackCard from "./Cards/BlackCard";
@@ -6,9 +6,9 @@ import {useDispatch, connect} from "react-redux";
 import {setToken, setUser} from "../../actions/authActions";
 import {GameList} from "./GameList";
 
-const Game = (props) => {
+const Game = ({gameSelected}) => {
     const dispatch = useDispatch();
-    const gameSelected = props.game;
+    
     
     useEffect(() => {
         setToken()(dispatch);
@@ -42,7 +42,7 @@ const Game = (props) => {
 };
 
 const mapStateToProps = state => ({
-   game: state.gameReducer.game,
+   gameSelected: state.gameReducer.game,
     user: state.authReducer.user,
     token: state.authReducer.token,
 });

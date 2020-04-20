@@ -1,7 +1,12 @@
-﻿import React, {useCallback, useEffect, useMemo} from 'react';
-import { GamePlayers } from "./GamePlayers";
+﻿import React, {useCallback, useMemo} from 'react';
+import GamePlayers from "./GamePlayers";
 import {useDispatch, useSelector, connect} from 'react-redux';
-import {addGame, checkUserTurn, joinGame, selectGame} from "../../actions/gameActions";
+import {
+    addGame,
+    joinGame,
+    resetPlayers,
+    selectGame
+} from "../../actions/gameActions";
 import {resetCards, sendSelectCards} from "../../actions/cardActions";
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
@@ -12,16 +17,16 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const dispatch = useDispatch();
 
     const selectCardsBtnClasses = useMemo( () => {
-        return Object.keys(blackCard).length > 0 && playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-gray-500";
-    }, [selectedCardCount, blackCard]);
+        return Object.keys(blackCard).length > 0 && !playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-gray-500";
+    }, [selectedCardCount, blackCard, playerSelectedCards]);
     
     const createGame = useCallback( () => {
-        addGame(user.sub, token)(dispatch);
+        addGame(user, token)(dispatch);
     }, [user, token, game]);
     
     const join = useCallback((name) => {
         joinGame({
-            userId: user.sub,
+            user: user,
             gameName: name,
             token,
         })(dispatch);
@@ -40,21 +45,24 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
             if (result.value) {
                 selectGame({game: {}})(dispatch);
                 resetCards()(dispatch);
+                window.gameHub.leaveGame(game.name, user.name);
+                resetPlayers()(dispatch);
             }
         })
-    }, []);
+    }, [game, user]);
     
     const selectCards = useCallback(() => {
-        if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick)
+        if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick && !playerSelectedCards)
         {
+            console.log("here");
             sendSelectCards({
-                gameId: game.id,
+                game,
                 userId: user.sub,
                 token,
                 cardIds: whiteCards.filter(wc => wc.selected).map(wc => wc.card.id),
             })(dispatch);
         }
-    }, [selectedCardCount, blackCard, user, token, whiteCards, game.id]);
+    }, [selectedCardCount, blackCard, user, token, whiteCards, game.id, playerSelectedCards]);
     
     const showPlayerControls = () => {
         return (

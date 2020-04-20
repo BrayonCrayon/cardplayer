@@ -4,6 +4,7 @@ import * as actions from "../constants/gameConstants";
 const initialState = {
     games: [],
     game: {},
+    players: [],
     isTurn: false,
     pending: false,
     error: null,
@@ -86,6 +87,26 @@ export default function gameReducer(state = initialState, action) {
                 ...state,
                 pending: false,
                 error: action.error,
+            };
+        case actions.ADD_PLAYER:
+            return {
+                ...state,
+                players: [...state.players, action.playerName],
+            };
+        case actions.REMOVE_PLAYER:
+            return {
+                ...state,
+                players: state.players.filter(player => player !== action.playerName),
+            };
+        case actions.UPDATE_PLAYERS:
+            return {
+                ...state,
+                players: state.players.concat(action.players.filter(player => !state.players.includes(player))),
+            };
+        case actions.RESET_PLAYERS:
+            return {
+                ...state,
+                players: [],
             };
         default:
             return state;

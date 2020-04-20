@@ -5,7 +5,6 @@ using CardPlayer.Models;
 using CardPlayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CardPlayer.Controllers
 {
@@ -45,6 +44,12 @@ namespace CardPlayer.Controllers
         {
             var cardsDeleted = _userCardDal.SoftDeleteUserCards(userCardVm);
             return cardsDeleted < 1 ? _userCardDal.GrabNewUserCards(userCardVm) : new List<UserCard>();
+        }
+        
+        [HttpGet("selected-cards")]
+        public List<UserCard> GetSelectedCards([FromQuery] UserCardViewModel userCardVm)
+        {
+            return _userCardDal.GetSelectedCards(userCardVm);
         }
         
 

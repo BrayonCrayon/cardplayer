@@ -18,9 +18,12 @@ namespace CardPlayer.DAL
         }
 
 
-        public IEnumerable<Game> GetAllGames()
+        public IEnumerable<Game> GetAllGames(GameViewModel gameVm)
         {
-            return _context.Games;
+            var gameIds = _context.GameUsers.Where(gUser => gUser.UserId == gameVm.userId)
+                .Select(gUser => gUser.GameId)
+                .ToList();
+            return _context.Games.Where(g => gameIds.Contains(g.Id));
         }
 
         public Game GetGameByName(string name)
@@ -30,9 +33,8 @@ namespace CardPlayer.DAL
 
         public bool IsUserTurn(GameViewModel gameVm)
         {
-            return _context.GameUsers
-                .Single(gUser => gUser.GameId == gameVm.gameId && gUser.UserId == gameVm.userId)
-                .IsTurn;
+            var gameUser = _context.GameUsers.SingleOrDefault(gUser => gUser.GameId == gameVm.gameId && gUser.UserId == gameVm.userId);
+            return gameUser?.IsTurn ?? false;
         }
         
         public Game StoreGame()

@@ -39,10 +39,10 @@ namespace CardPlayer.DAL
             .ToList();
         }
 
-        public UserCard GetBlackCard(string userId, int gameId)
+        public UserCard GetBlackCard(int gameId)
         {
             return _context.UserCards
-                .Where(userCard => userCard.GameId == gameId && userCard.UserId == userId)
+                .Where(userCard => userCard.GameId == gameId)
                 .Include(uc => uc.Card)
                 .Single(userCard => userCard.Card.TypeId == GetBlackType().Id);
         }
@@ -132,7 +132,7 @@ namespace CardPlayer.DAL
             _context.UserCards.Add(drawnBlackCard);
             _context.SaveChanges();
 
-            return GetBlackCard(userCardVm.userId, userCardVm.gameId);
+            return GetBlackCard(userCardVm.gameId);
         }
 
 
@@ -144,7 +144,7 @@ namespace CardPlayer.DAL
             if (whiteCards.Any())
             {
                 cardsInHand.whiteCards = whiteCards;
-                cardsInHand.blackCard = GetBlackCard(userCardVm.userId, userCardVm.gameId);
+                cardsInHand.blackCard = GetBlackCard(userCardVm.gameId);
                 return cardsInHand;
             }
             
@@ -157,6 +157,10 @@ namespace CardPlayer.DAL
             if (IsUserTurn(userCardVm.userId, userCardVm.gameId))
             {
                 cardsInHand.blackCard = GetNewBlackCard(userCardVm, takenCards);
+            }
+            else
+            {
+                cardsInHand.blackCard = GetBlackCard(userCardVm.gameId);
             }
 
             return cardsInHand;
@@ -224,6 +228,15 @@ namespace CardPlayer.DAL
             var usedCards = GetTakenCards(userCardVm.gameId).IgnoreQueryFilters().Select(usedCard => usedCard.CardId).ToList();
             var numOfCardsToDraw = HAND_LIMIT - GetTakenCards(userCardVm.gameId).Count(usedCard => usedCard.UserId == userCardVm.userId);
             return GetNewWhiteCards(usedCards, userCardVm.gameId, userCardVm.userId, numOfCardsToDraw);
+        }
+        
+        public List<UserCard> GetSelectedCards(UserCardViewModel userCardVm)
+        {
+            var selectedCards = _context.UserCards.Where(uCard => uCard.GameId == userCardVm.gameId)
+                .Include(uCard => uCard.Card)
+                .Where(uCard => uCard.Selected)
+                .ToList();
+            return selectedCards;
         }
         
     }

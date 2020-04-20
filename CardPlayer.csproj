@@ -53,6 +53,7 @@
     <Content Include="ClientApp\src\sagas\CardSaga.js" />
     <Content Include="ClientApp\src\sagas\gameSaga.js" />
     <Content Include="ClientApp\src\sass\app.scss" />
+    <Content Include="ClientApp\src\SignalRHelpers\GameHub.js" />
     <Content Include="ClientApp\src\store\configureStore.js" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />

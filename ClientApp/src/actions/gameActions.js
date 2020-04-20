@@ -24,12 +24,12 @@ export function addGameFailure(error) {
     }
 }
 
-export const addGame = (userId, token) => {
+export const addGame = (user, token) => {
     return async dispatch => {
         try {
             dispatch(addGamePending());
             const {data} = await Axios.post("/api/game", {
-                userId,
+                userId: user.sub,
             },{
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -37,10 +37,11 @@ export const addGame = (userId, token) => {
             });
             dispatch(addGameSuccess(data));
             dispatch(checkUserTurn({
-                userId,
+                userId: user.sub,
                 token,
                 gameId: data.id,
-            }))
+            }));
+            window.gameHub.joinGame(data.name, user.name);
         } catch (error) {
             console.error(error);
             dispatch(addGameFailure(error));
@@ -64,9 +65,10 @@ export const selectGame = (payload) => {
         {
             dispatch(checkUserTurn({
                 gameId: payload.game.id,
-                userId: payload.userId,
+                userId: payload.user.sub,
                 token: payload.token,
             }));
+            window.gameHub.joinGame(payload.game.name, payload.user.name);
         }
     }
 };
@@ -149,6 +151,7 @@ export const checkUserTurn = (payload) => {
                 }
             });
             dispatch(checkUserTurnSuccess(data));
+            // Get Selected Cards
         }      
         catch (error) {
             dispatch(checkUserTurnFailure(error));
@@ -186,11 +189,12 @@ export const joinGame = (payload) => {
                     Authorization: `Bearer ${payload.token}`,
                 },
                 params: {
-                    userId: payload.userId,
+                    userId: payload.user.sub,
                     gameName: payload.gameName,
                 }
             });
             dispatch(joinGameSuccess(data));
+            window.gameHub.joinGame(data.name, payload.user.name);
         } catch (error)
         {
             dispatch(joinGameFailure(error));
@@ -198,9 +202,57 @@ export const joinGame = (payload) => {
     }
 };
 
-export default {
-    addGamePending,
-    addGameSuccess,
-    addGameFailure,
-    addGame,
+// add players to game
+export function addPlayerAction(playerName) {
+    return {
+        type: gameConstants.ADD_PLAYER,
+        playerName,
+    }
 }
+
+export const addPlayer = (playerName) => {
+  return async dispatch => {
+      dispatch(addPlayerAction(playerName));
+  } 
+};
+
+// REMOVE player from game
+export function removePlayerAction(playerName) {
+    return {
+        type: gameConstants.REMOVE_PLAYER,
+        playerName,
+    }
+}
+
+export const removePlayer = (playerName) => {
+    return async dispatch => {
+        dispatch(removePlayerAction(playerName));
+    }
+};
+
+// UPDATE players for game
+export function updatePlayersAction(players) {
+    return {
+        type: gameConstants.UPDATE_PLAYERS,
+        players,
+    }
+}
+
+export const updatePlayers = (players) => {
+    return async dispatch => {
+        dispatch(updatePlayersAction(players));
+    } 
+};
+
+// RESET players for game
+export function resetPlayersAction() {
+    return {
+        type: gameConstants.RESET_PLAYERS,
+    }
+}
+
+export const resetPlayers = () => {
+    return async dispatch => {
+        dispatch(resetPlayersAction());      
+    }
+};

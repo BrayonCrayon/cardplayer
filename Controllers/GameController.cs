@@ -27,9 +27,9 @@ namespace CardPlayer.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Game> Get()
+        public IEnumerable<Game> Get([FromQuery] GameViewModel gameVm)
         {
-            return _gameDal.GetAllGames();
+            return _gameDal.GetAllGames(gameVm);
         }
 
         [HttpGet("join")]

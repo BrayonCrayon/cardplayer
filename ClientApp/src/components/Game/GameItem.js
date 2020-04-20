@@ -9,7 +9,7 @@ const GameItem = (props) => {
     const continueGame = useCallback(() => {
         selectGame({
             game,
-            userId: props.user.sub,
+            user: props.user,
             token: props.token,
         })(dispatch);
     }, [game, props.user, props.token]);
