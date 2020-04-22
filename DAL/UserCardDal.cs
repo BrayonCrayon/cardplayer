@@ -226,7 +226,10 @@ namespace CardPlayer.DAL
         public IEnumerable<UserCard> GrabNewUserCards(UserCardViewModel userCardVm)
         {
             var usedCards = GetTakenCards(userCardVm.gameId).IgnoreQueryFilters().Select(usedCard => usedCard.CardId).ToList();
-            var numOfCardsToDraw = HAND_LIMIT - GetTakenCards(userCardVm.gameId).Count(usedCard => usedCard.UserId == userCardVm.userId);
+            var numOfCardsToDraw = HAND_LIMIT - GetTakenCards(userCardVm.gameId)
+                .Include(uCard => uCard.Card)
+                .Where(uCard => uCard.Card.TypeId == GetWhiteType().Id)
+                .Count(usedCard => usedCard.UserId == userCardVm.userId);
             return GetNewWhiteCards(usedCards, userCardVm.gameId, userCardVm.userId, numOfCardsToDraw);
         }
         
@@ -234,10 +237,44 @@ namespace CardPlayer.DAL
         {
             var selectedCards = _context.UserCards.Where(uCard => uCard.GameId == userCardVm.gameId)
                 .Include(uCard => uCard.Card)
+                .Include(uCard => uCard.User)
                 .Where(uCard => uCard.Selected)
                 .ToList();
             return selectedCards;
         }
-        
+
+        public UserHandDto SetupNextRound(UserCardViewModel userCardVm)
+        {
+            var nextRoundBlackCard = new UserHandDto();
+
+            var result = SoftDeleteUserCards(userCardVm);
+            if (result < 0)
+            {
+                return nextRoundBlackCard;
+            }
+
+            var gameUsers = _context.GameUsers.Where(gUser => gUser.GameId == userCardVm.gameId)
+                .Include(gUser => gUser.User)
+                .OrderBy(gUser => gUser.User.Email)
+                .ToList();
+
+            var turnIdx = gameUsers.FindIndex(gUser => gUser.IsTurn);
+            gameUsers[turnIdx].IsTurn = false;
+            _context.SaveChanges();
+            turnIdx = turnIdx == gameUsers.Count() - 1 ? 0 : ++turnIdx;
+            gameUsers[turnIdx].IsTurn = true;
+            _context.SaveChanges();
+
+            userCardVm.userId = gameUsers[turnIdx].UserId;
+            var takenBlackCards = GetTakenCards(userCardVm.gameId)
+                .IgnoreQueryFilters()
+                .Include(uCard => uCard.Card)
+                .Where(uCard => uCard.Card.TypeId == GetBlackType().Id)
+                .Select(userCard => userCard.CardId)
+                .ToList();
+            nextRoundBlackCard.blackCard = GetNewBlackCard(userCardVm, takenBlackCards);
+
+            return nextRoundBlackCard;
+        }
     }
 }

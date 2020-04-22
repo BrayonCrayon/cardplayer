@@ -7,14 +7,14 @@ import {
     resetPlayers,
     selectGame
 } from "../../actions/gameActions";
-import {resetCards, sendSelectCards} from "../../actions/cardActions";
+import {getBlackCard, resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
 
-const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelectedCards}) => {
+const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelectedCards, winner, isTurn}) => {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.authReducer.user);
     const token = useSelector(state => state.authReducer.token);
-    const dispatch = useDispatch();
 
     const selectCardsBtnClasses = useMemo( () => {
         return Object.keys(blackCard).length > 0 && !playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-gray-500";
@@ -23,6 +23,22 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const createGame = useCallback( () => {
         addGame(user, token)(dispatch);
     }, [user, token, game]);
+    
+    const chooseWinner = useCallback(() => {
+        if (!winner.length)
+        {
+            Swal.fire("You must select a winner first");
+        }
+        else {
+            setupNextRound({
+                token, 
+                user,
+                blackCardId: blackCard.card.id,
+                game: game,
+                winner,
+            })(dispatch);
+        }
+    }, [winner, token, user, blackCard, game]);
     
     const join = useCallback((name) => {
         joinGame({
@@ -79,7 +95,14 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                     </div>
                 </div>
                 <button onClick={leaveGame} className="primary" >Leave Game</button>
-                <button onClick={selectCards} className={`primary my-2 ${selectCardsBtnClasses}`}>Select Cards</button>
+                {
+                    !isTurn &&
+                    <button onClick={selectCards} className={`primary my-2 ${selectCardsBtnClasses}`}>Select Cards</button>
+                }
+                {
+                    isTurn && 
+                    <button onClick={chooseWinner} className={`primary my-2`}>Pick Winner</button>
+                }
                 <GamePlayers/>
             </div>
         );
@@ -117,6 +140,8 @@ const mapStateToProps = state => ({
     selectedCardCount: state.cardReducer.selectedCards,
     whiteCards: state.cardReducer.whiteCards,
     playerSelectedCards: state.cardReducer.playerSelectedCards,
+    winner: state.gameReducer.winner,
+    isTurn: state.gameReducer.isTurn,
 });
 
 export default connect(mapStateToProps)(GameMenu);

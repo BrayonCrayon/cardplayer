@@ -31,9 +31,9 @@
     <Content Include="ClientApp\src\actions\authActions.js" />
     <Content Include="ClientApp\src\actions\cardActions.js" />
     <Content Include="ClientApp\src\actions\gameActions.js" />
-    <Content Include="ClientApp\src\ApiCalls\GameApiCalls.js" />
     <Content Include="ClientApp\src\components\Game\Cards\BlackCard.js" />
     <Content Include="ClientApp\src\components\Game\Cards\PlayerCards.js" />
+    <Content Include="ClientApp\src\components\Game\Cards\SelectedCards.js" />
     <Content Include="ClientApp\src\components\Game\Cards\WhiteCard.js" />
     <Content Include="ClientApp\src\components\Game\Game.js" />
     <Content Include="ClientApp\src\components\Game\GameItem.js" />

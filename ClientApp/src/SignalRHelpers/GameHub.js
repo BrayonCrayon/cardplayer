@@ -1,6 +1,7 @@
 ﻿import store from '../store/configureStore';
-import {addPlayer, removePlayer, updatePlayers} from "../actions/gameActions";
-import {getSelectedPlayerCards} from "../actions/cardActions";
+import {addPlayer, checkUserTurn, removePlayer, resetGame, updatePlayers} from "../actions/gameActions";
+import {deleteUsedCards, getBlackCard, getSelectedPlayerCards, resetSelectedCards} from "../actions/cardActions";
+import Swal from "sweetalert2";
 
 const signalR = require('@aspnet/signalr');
 
@@ -13,6 +14,7 @@ export class GameHub {
         this.connection.on("PlayerLeft", this.playerLeft);
         this.connection.on("UpdateActivePlayers", this.updateActivePlayers);
         this.connection.on("UpdatePlayerSelectedCards", this.updatePlayerSelectedCards);
+        this.connection.on("ShowWinner", this.showWinner);
         this.connection.start();
     }
     
@@ -40,6 +42,41 @@ export class GameHub {
         store.dispatch(getSelectedPlayerCards({
             gameId,
             token,
+        }));
+    };
+    
+    showWinner = (winnerName) => {
+          Swal.fire(`The Winner is ${winnerName}`);
+          const gameId = store.getState().gameReducer.game.id;
+          const token = store.getState().authReducer.token;
+          const user = store.getState().authReducer.user;
+          const whiteCardIds = store.getState().cardReducer.whiteCards
+              .filter(whiteCard => {
+                  return whiteCard.selected;
+              })
+              .map(whiteCard => {
+                  return whiteCard.card.id;
+              });
+
+        store.dispatch(deleteUsedCards({
+            user,
+            gameId,
+            cardIds: whiteCardIds,
+            token,
+        }));
+        
+        store.dispatch(resetGame());
+        store.dispatch(resetSelectedCards());
+
+        store.dispatch(checkUserTurn({
+            token,
+            userId: user.sub,
+            gameId,
+        }));
+        
+        store.dispatch(getBlackCard({
+            token,
+            gameId,
         }));
     };
 
@@ -71,6 +108,13 @@ export class GameHub {
                 console.log("Player Selected Cards Notification");
             })
     };
+    
+    tellPlayersTheWinner = (gameName, winnerName) => {
+        this.connection.invoke("ShowWinner", gameName, winnerName)
+            .then(() => {
+                console.log("Winner shown");
+            });
+    }
 }
 
 

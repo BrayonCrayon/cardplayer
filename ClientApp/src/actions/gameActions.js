@@ -2,6 +2,7 @@
 
 import * as gameConstants from "../constants/gameConstants";
 import Axios from "axios";
+import {getSelectedPlayerCards} from "./cardActions";
 
 // ADDING GAMES
 export function addGamePending() {
@@ -69,6 +70,10 @@ export const selectGame = (payload) => {
                 token: payload.token,
             }));
             window.gameHub.joinGame(payload.game.name, payload.user.name);
+            dispatch(getSelectedPlayerCards({
+                token: payload.token,
+                gameId: payload.game.id,
+            }));
         }
     }
 };
@@ -151,7 +156,6 @@ export const checkUserTurn = (payload) => {
                 }
             });
             dispatch(checkUserTurnSuccess(data));
-            // Get Selected Cards
         }      
         catch (error) {
             dispatch(checkUserTurnFailure(error));
@@ -195,6 +199,10 @@ export const joinGame = (payload) => {
             });
             dispatch(joinGameSuccess(data));
             window.gameHub.joinGame(data.name, payload.user.name);
+            dispatch(getSelectedPlayerCards({
+                token: payload.token,
+                gameId: data.id,
+            }));
         } catch (error)
         {
             dispatch(joinGameFailure(error));
@@ -254,5 +262,32 @@ export function resetPlayersAction() {
 export const resetPlayers = () => {
     return async dispatch => {
         dispatch(resetPlayersAction());      
+    }
+};
+
+// SET winner for game
+export function setWinnerAction(name) {
+    return {
+        type: gameConstants.SET_WINNER,
+        name,
+    }
+}
+
+export const setWinner = (name) => {
+    return async dispatch => {
+        dispatch(setWinnerAction(name));
+    } 
+};
+
+// RESET game for next round
+export function resetGameAction() {
+    return {
+        type: gameConstants.RESET_GAME,
+    }
+}
+
+export const resetGame = () => {
+    return async dispatch => {
+        dispatch(resetGameAction());      
     }
 };

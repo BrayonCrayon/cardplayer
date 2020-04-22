@@ -1,5 +1,7 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
+import * as gameConstants from "../constants/gameConstants";
+import {checkUserTurn, resetGame} from "./gameActions";
 
 export function getCardPending() {
     return {
@@ -231,11 +233,168 @@ export const getSelectedPlayerCards = (payload) => {
                     gameId: payload.gameId,
                 }
             });
-            console.log(data);
             dispatch(getSelectedPlayerCardsSuccess(data));
         } catch (error)
         {
             dispatch(getSelectedPlayerCardsFailure(error));
         }
     }
+};
+
+// Delete used cards
+export function deleteUsedCardsPending() {
+    return {
+        type: cardConstants.DELETE_USED_CARDS_PENDING,
+    }
+}
+
+export function deleteUsedCardsSuccess(newCards) {
+    return {
+        type: cardConstants.DELETE_USED_CARDS_SUCCESS,
+        newCards,
+    }
+}
+
+export function deleteUsedCardsFailure(error) {
+    return {
+        type: cardConstants.DELETE_USED_CARDS_FAILURE,
+        error,
+    }
+}
+
+export const deleteUsedCards = (payload) => {
+    return async dispatch => {
+        if (payload.cardIds.length === 0)
+            return;
+        
+        try {
+            dispatch(deleteUsedCardsPending());
+            const {data} = await Axios.post(`/api/cards/delete-used-cards`, {
+                userId: payload.user.sub,
+                cardIds: payload.cardIds,
+                gameId: payload.gameId,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            });
+            dispatch(removeUsedCards(payload.cardIds));
+            dispatch(deleteUsedCardsSuccess(data));
+        }
+        catch (error) {
+            dispatch(deleteUsedCardsFailure(error));
+        }
+    }
+};
+
+// Remove used cards from last round
+export function removeUsedCardsAction(cardIds) {
+    return {
+        type: cardConstants.REMOVE_USED_CARDS,
+        cardIds,
+    }
+}
+
+export const removeUsedCards = (cardIds) => {
+    return async dispatch => {
+        dispatch(removeUsedCardsAction(cardIds));
+    } 
+};
+
+// Setup next round
+export function setupNextRoundPending() {
+    return {
+        type: cardConstants.SETUP_NEXT_ROUND_PENDING,
+    }
+}
+
+export function setupNextRoundSuccess(newCards) {
+    return {
+        type: cardConstants.SETUP_NEXT_ROUND_SUCCESS,
+        newCards,
+    }
+}
+
+export function setupNextRoundFailure(error) {
+    return {
+        type: cardConstants.SETUP_NEXT_ROUND_FAILURE,
+        error,
+    }
+}
+
+export const setupNextRound = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(setupNextRoundPending());
+            const {data} = await Axios.post(`/api/cards/setup-next-round`, {
+                userId: payload.user.sub,
+                gameId: payload.game.id,
+                cardIds: [payload.blackCardId],
+            },{
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            });
+            dispatch(setupNextRoundSuccess(data));
+            dispatch(resetGame());
+            window.gameHub.tellPlayersTheWinner(payload.game.name, payload.winner);
+        } catch (error)
+        {
+            dispatch(setupNextRoundFailure(error));
+        }
+    }
+};
+
+// Get black card
+export function getBlackCardPending() {
+    return {
+        type: cardConstants.GET_BLACK_CARD_PENDING,
+    }
+}
+
+export function getBlackCardSuccess(blackCard) {
+    return {
+        type: cardConstants.GET_BLACK_CARD_SUCCESS,
+        blackCard,
+    }
+}
+
+export function getBlackCardFailure(error) {
+    return {
+        type: cardConstants.GET_BLACK_CARD_FAILURE,
+        error,
+    }
+}
+
+export const getBlackCard = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(getBlackCardPending());
+            const {data} = await Axios.get(`/api/cards/black-card`,{
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+                params: {
+                    gameId: payload.gameId,
+                }
+            });
+            dispatch(getBlackCardSuccess(data));
+        } catch (error)
+        {
+            dispatch(getBlackCardFailure(error));
+        }
+    }
+};
+
+// reset selected cards
+export function resetSelectedCardsAction() {
+    return {
+        type: cardConstants.RESET_SELECTED_CARDS,
+    }
+}
+
+export const resetSelectedCards = () => {
+  return async dispatch => {
+      dispatch(resetSelectedCardsAction());
+  } 
 };

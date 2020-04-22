@@ -5,6 +5,7 @@ import BlackCard from "./Cards/BlackCard";
 import {useDispatch, connect} from "react-redux";
 import {setToken, setUser} from "../../actions/authActions";
 import {GameList} from "./GameList";
+import SelectedCards from "./Cards/SelectedCards";
 
 const Game = ({gameSelected}) => {
     const dispatch = useDispatch();
@@ -23,7 +24,10 @@ const Game = ({gameSelected}) => {
     function playGame() {
         return (
             <div className="w-3/4 flex flex-col justify-center">
-                <BlackCard />
+                <div className="w-full flex flex-wrap">
+                    <BlackCard />
+                    <SelectedCards/>
+                </div>
                 <PlayerCards/>
             </div>
         )

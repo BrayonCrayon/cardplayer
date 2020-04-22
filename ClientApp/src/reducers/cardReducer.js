@@ -104,6 +104,71 @@ export default function cardReducer(state = initialState, action) {
                 ...state,
                 pending: false,
             };
+        case actions.REMOVE_USED_CARDS:
+            return {
+                ...state,
+                whiteCards: state.whiteCards.filter(card => !action.cardIds.includes(card.id)),
+            };
+        case actions.DELETE_USED_CARDS_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case actions.DELETE_USED_CARDS_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                whiteCards: action.newCards,
+            };
+        case actions.DELETE_USED_CARDS_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
+        case actions.SETUP_NEXT_ROUND_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case actions.SETUP_NEXT_ROUND_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                blackCard: action.newCards.blackCard,
+                selectedCards: 0,
+                playerSelectedCards: false,
+                selectedPlayerCards: [],
+            };
+        case actions.SETUP_NEXT_ROUND_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
+        case actions.GET_BLACK_CARD_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null,
+            };
+        case actions.GET_BLACK_CARD_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                blackCard: action.blackCard,
+            };
+        case actions.GET_BLACK_CARD_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
+        case actions.RESET_SELECTED_CARDS:
+            return {
+                ...state,
+                selectedPlayerCards: [],
+            };
         default:
             return state;
     }

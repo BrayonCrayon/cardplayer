@@ -24,14 +24,14 @@ namespace CardPlayer.SignalREndPoints.Hubs
             await Clients.Group(gameName).SendAsync("UpdateActivePlayers", players);
         }
 
-        public async Task SendMessageToGroup(string gameName, string message)
-        {
-            await Clients.Group(gameName).SendAsync("ReceiveMessage", message);
-        }
-
         public async Task PlayerSelectedCardsNotify(string gameName)
         {
             await Clients.Group(gameName).SendAsync("UpdatePlayerSelectedCards");
         }
+
+        public async Task ShowWinner(string gameName, string winnerName)
+        {
+            await Clients.Group(gameName).SendAsync("ShowWinner", winnerName);
+        } 
     }
 }

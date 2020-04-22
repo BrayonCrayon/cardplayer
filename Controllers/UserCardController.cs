@@ -39,11 +39,17 @@ namespace CardPlayer.Controllers
             return _userCardDal.SelectUserCards(userCardVm);
         }
 
-        [HttpDelete]
+        [HttpPost("delete-used-cards")]
         public IEnumerable<UserCard> DeleteCards([FromBody] UserCardViewModel userCardVm)
         {
             var cardsDeleted = _userCardDal.SoftDeleteUserCards(userCardVm);
-            return cardsDeleted < 1 ? _userCardDal.GrabNewUserCards(userCardVm) : new List<UserCard>();
+            return cardsDeleted == 1 ? _userCardDal.GrabNewUserCards(userCardVm) : new List<UserCard>();
+        }
+
+        [HttpPost("setup-next-round")]
+        public UserHandDto SetupNextRound([FromBody] UserCardViewModel userCardVm)
+        {
+            return _userCardDal.SetupNextRound(userCardVm);
         }
         
         [HttpGet("selected-cards")]
@@ -51,7 +57,12 @@ namespace CardPlayer.Controllers
         {
             return _userCardDal.GetSelectedCards(userCardVm);
         }
-        
+
+        [HttpGet("black-card")]
+        public UserCard GetBlackCard([FromQuery] UserCardViewModel userCardVm)
+        {
+            return _userCardDal.GetBlackCard(userCardVm.gameId);
+        }
 
     }
 }

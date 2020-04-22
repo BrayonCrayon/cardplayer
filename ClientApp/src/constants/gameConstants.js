@@ -30,3 +30,7 @@ export const ADD_PLAYER = 'ADD_PLAYER';
 export const REMOVE_PLAYER = 'REMOVE_PLAYER';
 export const UPDATE_PLAYERS = 'UPDATE_PLAYERS';
 export const RESET_PLAYERS = 'RESET_PLAYERS';
+
+export const SET_WINNER = 'SET_WINNER';
+
+export const RESET_GAME = 'RESET_GAME';
