@@ -1,4 +1,4 @@
-﻿import React, {useCallback, useEffect} from 'react';
+﻿import React, {useEffect} from 'react';
 import GameMenu from "./GameMenu";
 import PlayerCards from "./Cards/PlayerCards";
 import BlackCard from "./Cards/BlackCard";
@@ -14,7 +14,7 @@ const Game = ({gameSelected}) => {
     useEffect(() => {
         setToken()(dispatch);
         setUser()(dispatch);
-    }, []);
+    }, [dispatch]);
 
 
     function showUserGames() {

@@ -15,7 +15,7 @@ export const JoinGameModal = ({buttonLabel, title, confirmBtnLabel, confirmCallb
     
     const [modal, setModal] = useState(false);
     const [inputVal, setInputVal] = useState("");
-    const toggle = () => setModal(!modal);
+    const toggle = useCallback(() => setModal(!modal), [modal, setModal]);
     
     const confirm = useCallback(() => {
         confirmCallback(inputVal);

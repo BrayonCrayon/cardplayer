@@ -203,6 +203,11 @@ export const joinGame = (payload) => {
                 token: payload.token,
                 gameId: data.id,
             }));
+            dispatch(checkUserTurn({
+                token: payload.token,
+                userId: payload.user.sub,
+                gameId: data.id,
+            }));
         } catch (error)
         {
             dispatch(joinGameFailure(error));
