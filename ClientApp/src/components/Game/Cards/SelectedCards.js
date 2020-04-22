@@ -10,7 +10,7 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
     
     const pickWinner = useCallback((userName) => {
         setWinner(userName)(dispatch);
-    }, []);
+    }, [dispatch]);
     
     useMemo(() => {
         setPickedCards(new Map());

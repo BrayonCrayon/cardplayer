@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
 
@@ -51,10 +50,10 @@ export class LoginMenu extends Component {
     authenticatedView(userName, appPaths) {
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={appPaths.profilePath}>{userName}</NavLink>
+                <NavLink href={appPaths.profilePath} className="text-black hover:text-gray-500" to={appPaths.profilePath}>{userName}</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={appPaths.logoutPath}>Logout</NavLink>
+                <NavLink href={appPaths.logoutPath} className="text-black hover:text-gray-500" to={appPaths.logoutPath}>Logout</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -63,10 +62,10 @@ export class LoginMenu extends Component {
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
             <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={registerPath}>Register</NavLink>
+                <NavLink href={registerPath} className="text-black hover:text-gray-500" to={registerPath}>Register</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={loginPath}>Login</NavLink>
+                <NavLink href={loginPath} className="text-black hover:text-gray-500" to={loginPath}>Login</NavLink>
             </NavItem>
         </Fragment>);
     }

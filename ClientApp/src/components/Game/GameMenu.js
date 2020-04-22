@@ -7,7 +7,7 @@ import {
     resetPlayers,
     selectGame
 } from "../../actions/gameActions";
-import {getBlackCard, resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
+import {resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
 
@@ -22,7 +22,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     
     const createGame = useCallback( () => {
         addGame(user, token)(dispatch);
-    }, [user, token, game]);
+    }, [user, token, dispatch]);
     
     const chooseWinner = useCallback(() => {
         if (!winner.length)
@@ -38,7 +38,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                 winner,
             })(dispatch);
         }
-    }, [winner, token, user, blackCard, game]);
+    }, [winner, token, user, blackCard, game, dispatch]);
     
     const join = useCallback((name) => {
         joinGame({
@@ -46,7 +46,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
             gameName: name,
             token,
         })(dispatch);
-    }, [user, token]);
+    }, [user, token, dispatch]);
     
     const leaveGame = useCallback(() => {
         Swal.fire({
@@ -65,7 +65,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                 resetPlayers()(dispatch);
             }
         })
-    }, [game, user]);
+    }, [game, user, dispatch]);
     
     const selectCards = useCallback(() => {
         if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick && !playerSelectedCards)
@@ -78,7 +78,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                 cardIds: whiteCards.filter(wc => wc.selected).map(wc => wc.card.id),
             })(dispatch);
         }
-    }, [selectedCardCount, blackCard, user, token, whiteCards, game.id, playerSelectedCards]);
+    }, [selectedCardCount, blackCard, user, token, whiteCards, game, playerSelectedCards, dispatch]);
     
     const showPlayerControls = () => {
         return (

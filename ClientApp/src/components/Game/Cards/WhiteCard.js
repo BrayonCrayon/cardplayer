@@ -9,7 +9,7 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, pla
     
     const selectClasses = useMemo(() => {
         return card.selected ? "border-blue-500" : "border-white";
-    }, [card.selected, blackCard, card.selected]);
+    }, [card.selected]);
     
     const selectLimitClasses = useMemo(() => {
         return (selectedCardCount === blackCard.card.pick && !card.selected) ? "cursor-not-allowed shadow-inner border-none hover:shadow-none" : ""; 
@@ -20,7 +20,7 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, pla
         {
             onSelect(card);
         }
-    }, [card.selected, selectedCardCount, playerSelectedCards, blackCard.card.pick, disabled]);
+    }, [selectedCardCount, playerSelectedCards, blackCard.card.pick, disabled, card, onSelect]);
     
     return (
         <div className={`border-2 rounded bg-white m-1 h-48 p-2 w-1/5 ${classes} ${selectClasses}  ${selectLimitClasses} `}

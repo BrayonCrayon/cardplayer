@@ -1,6 +1,6 @@
-﻿import React, {useCallback, useEffect} from 'react';
+﻿import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchGames, selectGame} from "../../actions/gameActions";
+import {fetchGames} from "../../actions/gameActions";
 import GameItem from "./GameItem";
 
 export const GameList = () => {
@@ -13,7 +13,7 @@ export const GameList = () => {
         if (userId && token) {
             fetchGames(userId, token)(dispatch);
         }
-    }, [userId, token]);
+    }, [userId, token, dispatch]);
     
     const displayGameList = () => {
         

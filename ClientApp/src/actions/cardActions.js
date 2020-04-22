@@ -1,7 +1,6 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
-import * as gameConstants from "../constants/gameConstants";
-import {checkUserTurn, resetGame} from "./gameActions";
+import {resetGame} from "./gameActions";
 
 export function getCardPending() {
     return {
