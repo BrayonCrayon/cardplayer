@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CardPlayer.DAL;
 using CardPlayer.Models;
-using CardPlayer.Services;
+using CardPlayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,16 +20,22 @@ namespace CardPlayer.Controllers
             _gameDal = gameDal;
         }
         
-        [HttpGet]
-        public IEnumerable<Game> Get()
+        [HttpGet("is-turn")]
+        public ActionResult<bool> IsUserTurn([FromQuery] GameViewModel gameVm)
         {
-            return _gameDal.GetAllGames();
+            return _gameDal.IsUserTurn(gameVm);
+        }
+        
+        [HttpGet]
+        public IEnumerable<Game> Get([FromQuery] GameViewModel gameVm)
+        {
+            return _gameDal.GetAllGames(gameVm);
         }
 
         [HttpGet("join")]
-        public ActionResult<Game> JoinGame([FromBody] GameViewModel gameVm)
+        public ActionResult<Game> JoinGame([FromQuery] GameViewModel gameVm)
         {
-            var game = _gameDal.GetGameByName(gameVm.game.Name);
+            var game = _gameDal.GetGameByName(gameVm.gameName);
 
              if (game == null)
              {

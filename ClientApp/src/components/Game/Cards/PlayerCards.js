@@ -1,49 +1,50 @@
-﻿import React, { Component } from 'react';
+﻿import React, {useCallback, useEffect} from 'react';
+import {connect, useDispatch} from "react-redux";
+import {checkAnyCardsSelected, getCards, incrementSelectedCardCount, selectCards} from "../../../actions/cardActions";
+import WhiteCard from "./WhiteCard";
 
-export class PlayerCards extends Component {
+const PlayerCards = ({whiteCards, game, userId, token, isTurn, playerSelectedCards}) => {
+    const dispatch = useDispatch();
     
+    const onSelect = useCallback((card) => {
+        selectCards(card.id)(dispatch);
+        incrementSelectedCardCount(card.selected ? 1 : -1)(dispatch);
+    }, []);
+    
+    useEffect(() => {
+        getCards({
+            gameId: game.id,
+            userId,
+            token,
+        })(dispatch);
+        checkAnyCardsSelected({
+            gameId: game.id,
+            userId,
+            token,
+        })(dispatch);
+    }, [game, userId, token]);
+    
+    return (
+        <div className="flex flex-wrap w-full justify-around">
+            {whiteCards.length && whiteCards.map(whiteCard => (
+                <WhiteCard card={whiteCard} key={whiteCard.id} disabled={isTurn || playerSelectedCards} selected={whiteCard.selected} onSelect={onSelect} />
+            ))}
+            {!whiteCards.length && 
+                <div className="text-lg text-center">
+                    No Cards Available
+                </div>
+            }
+        </div>
+    );
+};
 
-    render() {
-        return (
-            <div className="flex flex-wrap w-full justify-around">
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 1 
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 2
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 3
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 4
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 5
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 6
-                    </div>
-                </div>
-                <div className="rounded shadow-md bg-white m-1 h-48 p-2 w-1/5">
-                    <div className="font-bold">
-                        Card 7
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    
-    
-}
+const mapStateToProps = state => ({
+    whiteCards: state.cardReducer.whiteCards,
+    game: state.gameReducer.game,
+    token: state.authReducer.token,
+    userId: state.authReducer.user.sub,
+    isTurn: state.gameReducer.isTurn,
+    playerSelectedCards: state.cardReducer.playerSelectedCards,
+});
+
+export default connect(mapStateToProps)(PlayerCards);

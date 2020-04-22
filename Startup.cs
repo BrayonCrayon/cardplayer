@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using CardPlayer.Data;
 using CardPlayer.Models;
+using CardPlayer.SignalREndPoints.Hubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,8 +42,11 @@ namespace CardPlayer
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSignalR();
             
             services.AddTransient<GameDal>();
+            services.AddTransient<UserCardDal>();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -66,6 +70,8 @@ namespace CardPlayer
                 app.UseHsts();
             }
 
+            app.UseRouting();
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -81,6 +87,7 @@ namespace CardPlayer
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<GameHub>("/gameHub");
             });
 
             app.UseSpa(spa =>

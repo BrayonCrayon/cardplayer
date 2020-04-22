@@ -2,21 +2,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import {Router } from 'react-router';
 import App from './App';
-import createStore from "./store/configureStore";
+import store from "./store/configureStore";
 import {Provider} from "react-redux";
 //import registerServiceWorker from './registerServiceWorker';
-
+import {GameHub} from './SignalRHelpers/GameHub';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 
-const store = createStore;
+window.gameHub = new GameHub();
 
 ReactDOM.render(
   <BrowserRouter  basename={baseUrl}>
-          <Provider store={store}>
-            <App />
-          </Provider>
+      <Provider store={store}>
+        <App />
+      </Provider>
   </BrowserRouter>,
   document.getElementById('root')
 );

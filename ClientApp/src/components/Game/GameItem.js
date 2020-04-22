@@ -1,14 +1,18 @@
 ﻿import React, {useCallback} from 'react';
 import {selectGame} from "../../actions/gameActions";
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 
-export const GameItem = (props) => {
+const GameItem = (props) => {
     const dispatch = useDispatch();
     const game = props.game;
 
     const continueGame = useCallback(() => {
-        selectGame(game)(dispatch);
-    }, [game]);
+        selectGame({
+            game,
+            user: props.user,
+            token: props.token,
+        })(dispatch);
+    }, [game, props.user, props.token]);
     
     return (
         <div className="w-full flex flex-wrap justify-between py-2 border-dashed border-b-2 border-gray-500 ">
@@ -22,5 +26,11 @@ export const GameItem = (props) => {
             </div>
         </div>
     )
-    
 };
+
+const mapStateToProps = state => ({
+   user: state.authReducer.user,
+   token: state.authReducer.token, 
+});
+
+export default connect(mapStateToProps)(GameItem);

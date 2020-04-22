@@ -4,7 +4,10 @@ import * as actions from "../constants/gameConstants";
 const initialState = {
     games: [],
     game: {},
+    players: [],
+    isTurn: false,
     pending: false,
+    winner: "",
     error: null,
 };
 
@@ -50,6 +53,72 @@ export default function gameReducer(state = initialState, action) {
             return {
                 ...state,
                 game: action.game,
+            };
+        case actions.CHECK_USER_TURN_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case actions.CHECK_USER_TURN_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                isTurn: action.isTurn,
+            };
+        case actions.CHECK_USER_TURN_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                pending: false,
+            };
+        case actions.JOIN_GAME_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null,
+            };
+        case actions.JOIN_GAME_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                game: action.game,
+            };
+        case actions.JOIN_GAME_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+            };
+        case actions.ADD_PLAYER:
+            return {
+                ...state,
+                players: [...state.players, action.playerName],
+            };
+        case actions.REMOVE_PLAYER:
+            return {
+                ...state,
+                players: state.players.filter(player => player !== action.playerName),
+            };
+        case actions.UPDATE_PLAYERS:
+            return {
+                ...state,
+                players: state.players.concat(action.players.filter(player => !state.players.includes(player))),
+            };
+        case actions.RESET_PLAYERS:
+            return {
+                ...state,
+                players: [],
+            };
+        case actions.SET_WINNER:
+            return {
+                ...state,
+                winner: action.name,  
+            };
+        case actions.RESET_GAME:
+            return {
+                ...state,
+                isTurn: false,
+                winner: "",
             };
         default:
             return state;
