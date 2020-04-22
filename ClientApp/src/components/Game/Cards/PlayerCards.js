@@ -9,7 +9,7 @@ const PlayerCards = ({whiteCards, game, userId, token, isTurn, playerSelectedCar
     const onSelect = useCallback((card) => {
         selectCards(card.id)(dispatch);
         incrementSelectedCardCount(card.selected ? 1 : -1)(dispatch);
-    }, []);
+    }, [dispatch]);
     
     useEffect(() => {
         getCards({
@@ -22,7 +22,7 @@ const PlayerCards = ({whiteCards, game, userId, token, isTurn, playerSelectedCar
             userId,
             token,
         })(dispatch);
-    }, [game, userId, token]);
+    }, [game, userId, token, dispatch]);
     
     return (
         <div className="flex flex-wrap w-full justify-around">

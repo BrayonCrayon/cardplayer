@@ -169,6 +169,11 @@ export default function cardReducer(state = initialState, action) {
                 ...state,
                 selectedPlayerCards: [],
             };
+        case actions.REMOVE_SELECTED_CARDS:
+            return {
+                ...state,
+                selectedPlayerCards: state.selectedPlayerCards.filter(whiteCard => !action.cardIds.includes(whiteCard.card.id)),  
+            };
         default:
             return state;
     }

@@ -12,7 +12,7 @@ const GameItem = (props) => {
             user: props.user,
             token: props.token,
         })(dispatch);
-    }, [game, props.user, props.token]);
+    }, [game, props.user, props.token, dispatch]);
     
     return (
         <div className="w-full flex flex-wrap justify-between py-2 border-dashed border-b-2 border-gray-500 ">
@@ -22,7 +22,7 @@ const GameItem = (props) => {
                 </div>
             </div>
             <div className="w-1/4">
-                <button className="primary" onClick={continueGame} >Continue</button>
+                <button className="secondary" onClick={continueGame} >Continue</button>
             </div>
         </div>
     )

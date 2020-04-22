@@ -15,7 +15,7 @@ export const JoinGameModal = ({buttonLabel, title, confirmBtnLabel, confirmCallb
     
     const [modal, setModal] = useState(false);
     const [inputVal, setInputVal] = useState("");
-    const toggle = () => setModal(!modal);
+    const toggle = useCallback(() => setModal(!modal), [modal, setModal]);
     
     const confirm = useCallback(() => {
         confirmCallback(inputVal);
@@ -23,8 +23,8 @@ export const JoinGameModal = ({buttonLabel, title, confirmBtnLabel, confirmCallb
     }, [confirmCallback, toggle, inputVal]);
     
     return (
-      <div>
-          <button className="primary" onClick={toggle}>{buttonLabel}</button>
+      <div className="py-2 w-4/6 self-center">
+          <button className="primary-secondary w-full" onClick={toggle}>{buttonLabel}</button>
           <Modal isOpen={modal} toggle={toggle} >
               <ModalHeader toggle={toggle}>{title}</ModalHeader>
               <ModalBody>
@@ -37,7 +37,7 @@ export const JoinGameModal = ({buttonLabel, title, confirmBtnLabel, confirmCallb
               </ModalBody>
               <ModalFooter>
                   <button className="primary" onClick={confirm}>{confirmBtnLabel}</button>
-                  <button className="rounded-full bg-red-500 text-white font-semibold py-2 px-4 hover:bg-red-700" onClick={toggle}>Cancel</button>
+                  <button className="primary-cancel" onClick={toggle}>Cancel</button>
               </ModalFooter>
           </Modal>
       </div>  

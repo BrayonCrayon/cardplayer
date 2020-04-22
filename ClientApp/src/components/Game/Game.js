@@ -1,4 +1,4 @@
-﻿import React, {useCallback, useEffect} from 'react';
+﻿import React, {useEffect} from 'react';
 import GameMenu from "./GameMenu";
 import PlayerCards from "./Cards/PlayerCards";
 import BlackCard from "./Cards/BlackCard";
@@ -14,7 +14,7 @@ const Game = ({gameSelected}) => {
     useEffect(() => {
         setToken()(dispatch);
         setUser()(dispatch);
-    }, []);
+    }, [dispatch]);
 
 
     function showUserGames() {
@@ -34,7 +34,7 @@ const Game = ({gameSelected}) => {
     }
     
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center self-center bg-gray-200 rounded p-4 my-2 w-3/4 shadow-md">
           {
               Object.keys( gameSelected).length > 0
               ? playGame()

@@ -1,7 +1,6 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
-import * as gameConstants from "../constants/gameConstants";
-import {checkUserTurn, resetGame} from "./gameActions";
+import {resetGame} from "./gameActions";
 
 export function getCardPending() {
     return {
@@ -278,6 +277,7 @@ export const deleteUsedCards = (payload) => {
                     Authorization: `Bearer ${payload.token}`,
                 },
             });
+            
             dispatch(removeUsedCards(payload.cardIds));
             dispatch(deleteUsedCardsSuccess(data));
         }
@@ -398,3 +398,17 @@ export const resetSelectedCards = () => {
       dispatch(resetSelectedCardsAction());
   } 
 };
+
+// remove selected cards
+export function removeSelectedCardsAction(cardIds) {
+    return {
+        type: cardConstants.REMOVE_SELECTED_CARDS,
+        cardIds,
+    }
+}
+
+export function removeSelectedCards(cardIds) {
+    return async dispatch => {
+        dispatch(removeSelectedCardsAction(cardIds));
+    }
+}

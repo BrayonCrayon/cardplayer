@@ -1,18 +1,18 @@
 ﻿import React from 'react';
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 
 const GamePlayers = ({players}) => {
 
     return (
         <div className="shadow-md flex flex-col m-4 bg-white rounded">
-            <div className="h-64 m-2">
+            <div className="h-72 m-2">
                 <div className="text-black text-xl m-2">
                     Players
                 </div>
-                <div className="text-black text-sm shadow-inner flex flex-wrap rounded">
+                <div className="bg-gray-100 text-black text-sm shadow-inner flex flex-col rounded overflow-auto h-56 px-2">
                     {
                         players.length && players.map(name => {
-                           return <div key={name} className="w-full border-b-2 border-gray-300 px-2">
+                           return <div key={name} className="w-full border-b border-black p-2">
                                {name}
                             </div>
                         })

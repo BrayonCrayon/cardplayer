@@ -2,7 +2,8 @@
 
 import * as gameConstants from "../constants/gameConstants";
 import Axios from "axios";
-import {getSelectedPlayerCards} from "./cardActions";
+import {deleteUsedCards, getSelectedPlayerCards, removeSelectedCards} from "./cardActions";
+import store from "../store/configureStore";
 
 // ADDING GAMES
 export function addGamePending() {
@@ -59,21 +60,38 @@ export function setGame(game) {
 }
 
 export const selectGame = (payload) => {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setGame(payload.game));
         
         if (Object.keys(payload.game).length > 0)
         {
-            dispatch(checkUserTurn({
+            await dispatch(checkUserTurn({
                 gameId: payload.game.id,
                 userId: payload.user.sub,
                 token: payload.token,
             }));
             window.gameHub.joinGame(payload.game.name, payload.user.name);
-            dispatch(getSelectedPlayerCards({
+            await dispatch(getSelectedPlayerCards({
                 token: payload.token,
                 gameId: payload.game.id,
             }));
+
+            const cardIds = store.getState().cardReducer.selectedPlayerCards
+                .filter(whiteCard => {
+                    return whiteCard.user.id === payload.user.sub;
+                })
+                .map(whiteCards => {
+                    return whiteCards.card.id;
+                });
+            if (store.getState().gameReducer.isTurn && cardIds.length) {
+                await deleteUsedCards({
+                    token: payload.token,
+                    user: payload.user,
+                    gameId: payload.game.id,
+                    cardIds,
+                })(dispatch);
+                await dispatch(removeSelectedCards(cardIds));
+            }
         }
     }
 };
@@ -201,6 +219,11 @@ export const joinGame = (payload) => {
             window.gameHub.joinGame(data.name, payload.user.name);
             dispatch(getSelectedPlayerCards({
                 token: payload.token,
+                gameId: data.id,
+            }));
+            dispatch(checkUserTurn({
+                token: payload.token,
+                userId: payload.user.sub,
                 gameId: data.id,
             }));
         } catch (error)

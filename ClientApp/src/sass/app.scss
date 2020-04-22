@@ -5,9 +5,34 @@
 @tailwind utilities;
 
 .primary {
-  @apply rounded-full bg-gray-500 text-white font-semibold py-2 px-4;
+  @apply rounded bg-green-400 text-white font-semibold py-2 px-4 shadow-lg border-b-4 border-green-800;
   
   &:hover {
-    @apply bg-gray-700;
+    @apply bg-green-500;
+  }
+}
+
+.primary-secondary {
+  @apply rounded bg-purple-400 text-white font-semibold py-2 px-4 shadow-lg border-b-4 border-purple-800;
+
+  &:hover {
+    @apply bg-purple-500;
+  }
+}
+
+.primary-cancel {
+  @apply rounded bg-red-400 text-white font-semibold py-2 px-4 border-b-4 border-red-800;
+  
+  &:hover {
+      @apply bg-red-500;
+  }
+}
+
+
+.secondary {
+  @apply rounded bg-white text-black font-semibold py-2 px-4 shadow-lg border border-b-4 border-gray-400;
+
+  &:hover {
+    @apply bg-gray-500;
   }
 }

@@ -3,25 +3,24 @@ import {addPlayer, checkUserTurn, removePlayer, resetGame, updatePlayers} from "
 import {deleteUsedCards, getBlackCard, getSelectedPlayerCards, resetSelectedCards} from "../actions/cardActions";
 import Swal from "sweetalert2";
 
-const signalR = require('@aspnet/signalr');
+const signalR = require('@microsoft/signalr');
 
 export class GameHub {
     constructor() {
-        this.connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
+        this.connection = new signalR.HubConnectionBuilder().withAutomaticReconnect().withUrl("/gameHub").build();
         
-        this.connection.on("ReceiveMessage", this.receiveMessage);
         this.connection.on("PlayerJoined", this.playerJoined);
         this.connection.on("PlayerLeft", this.playerLeft);
         this.connection.on("UpdateActivePlayers", this.updateActivePlayers);
         this.connection.on("UpdatePlayerSelectedCards", this.updatePlayerSelectedCards);
         this.connection.on("ShowWinner", this.showWinner);
-        this.connection.start();
+        this.connection.start()
+            .then(() => {})
+            .catch(error => console.log(error));
+        this.connection.onclose(() => {
+            this.connection.start().then().catch();
+        });
     }
-    
-    // incoming requests
-    receiveMessage = (user, message) => {
-        console.log(user, message);
-    };
     
     playerJoined = (playerName) => {
         store.dispatch(addPlayer(playerName));
@@ -84,36 +83,36 @@ export class GameHub {
     joinGame = (gameName, userName) => {
         this.connection.invoke("JoinGame", gameName, userName)
             .then(() => {
-                console.log("Game Joined");
-            });  
+            })
+            .catch();  
     };
     
     leaveGame = (gameName, userName) => {
         this.connection.invoke("LeaveGame", gameName, userName)
             .then(() => {
-                console.log("player left");
-            });
+            })
+            .catch();
     };
     
     updatePlayers = (gameName) => {
         this.connection.invoke("UpdateActivePlayers", gameName, store.getState().gameReducer.players)
             .then(() => {
-                console.log("Players updated"); 
-            });
+            })
+            .catch();
     };
     
     playerSelectedCardsNotify = (gameName) => {
         this.connection.invoke("PlayerSelectedCardsNotify", gameName)
             .then(() => {
-                console.log("Player Selected Cards Notification");
             })
+            .catch();
     };
     
     tellPlayersTheWinner = (gameName, winnerName) => {
         this.connection.invoke("ShowWinner", gameName, winnerName)
             .then(() => {
-                console.log("Winner shown");
-            });
+            })
+            .catch();
     }
 }
 
