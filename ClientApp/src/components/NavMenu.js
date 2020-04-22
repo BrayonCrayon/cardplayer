@@ -24,23 +24,21 @@ export class NavMenu extends Component {
   render () {
     return (
       <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 bg-white" light>
+        <Navbar className="navbar-expand-sm navbar-toggleable-sm border-t-8 border-purple-500 shadow-md mb-3 bg-white" light>
           <div className="flex w-full">
-            <NavbarBrand className="w-1/2 text-center" href="/" to="/">CardPlayer</NavbarBrand>
+            <NavbarBrand className="w-1/2 text-center font-weight-bold text-4xl p-0 hover:text-purple-800" href="/" to="/">The CodeCove Cards</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="w-full flex justify-end" isOpen={!this.state.collapsed} navbar>
-              <div>
-                <ul className="navbar-nav">
+                <ul className="flex m-0">
                   <NavItem>
-                    <NavLink href="/" className="text-black hover:text-gray-500" to="/">Home</NavLink>
+                    <NavLink href="/" className="text-black text-lg font-semibold hover:text-purple-800" to="/">Home</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/game" className="text-black hover:text-gray-500" to="/game">Game</NavLink>
+                    <NavLink href="/game" className="text-black text-lg font-semibold hover:text-purple-800" to="/game">Game</NavLink>
                   </NavItem>
                   <LoginMenu>
                   </LoginMenu>
                 </ul>
-              </div>
             </Collapse>
           </div>
         </Navbar>

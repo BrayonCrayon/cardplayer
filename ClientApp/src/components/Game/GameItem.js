@@ -22,7 +22,7 @@ const GameItem = (props) => {
                 </div>
             </div>
             <div className="w-1/4">
-                <button className="primary" onClick={continueGame} >Continue</button>
+                <button className="secondary" onClick={continueGame} >Continue</button>
             </div>
         </div>
     )

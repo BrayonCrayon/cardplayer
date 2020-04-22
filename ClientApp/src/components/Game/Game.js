@@ -34,7 +34,7 @@ const Game = ({gameSelected}) => {
     }
     
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center self-center bg-gray-200 rounded p-4 my-2 w-3/4 shadow-md">
           {
               Object.keys( gameSelected).length > 0
               ? playGame()

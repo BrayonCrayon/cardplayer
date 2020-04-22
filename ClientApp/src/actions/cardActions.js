@@ -277,6 +277,7 @@ export const deleteUsedCards = (payload) => {
                     Authorization: `Bearer ${payload.token}`,
                 },
             });
+            
             dispatch(removeUsedCards(payload.cardIds));
             dispatch(deleteUsedCardsSuccess(data));
         }
@@ -397,3 +398,17 @@ export const resetSelectedCards = () => {
       dispatch(resetSelectedCardsAction());
   } 
 };
+
+// remove selected cards
+export function removeSelectedCardsAction(cardIds) {
+    return {
+        type: cardConstants.REMOVE_SELECTED_CARDS,
+        cardIds,
+    }
+}
+
+export function removeSelectedCards(cardIds) {
+    return async dispatch => {
+        dispatch(removeSelectedCardsAction(cardIds));
+    }
+}

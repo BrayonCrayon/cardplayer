@@ -7,7 +7,7 @@ import {
     resetPlayers,
     selectGame
 } from "../../actions/gameActions";
-import {resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
+import { resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
 
@@ -17,7 +17,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const token = useSelector(state => state.authReducer.token);
 
     const selectCardsBtnClasses = useMemo( () => {
-        return Object.keys(blackCard).length > 0 && !playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-gray-500";
+        return Object.keys(blackCard).length > 0 && !playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-green-400";
     }, [selectedCardCount, blackCard, playerSelectedCards]);
     
     const createGame = useCallback( () => {
@@ -37,6 +37,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                 game: game,
                 winner,
             })(dispatch);
+            
         }
     }, [winner, token, user, blackCard, game, dispatch]);
     
@@ -46,6 +47,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
             gameName: name,
             token,
         })(dispatch);
+
     }, [user, token, dispatch]);
     
     const leaveGame = useCallback(() => {
@@ -70,7 +72,6 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const selectCards = useCallback(() => {
         if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick && !playerSelectedCards)
         {
-            console.log("here");
             sendSelectCards({
                 game,
                 userId: user.sub,
@@ -83,7 +84,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const showPlayerControls = () => {
         return (
 
-            <div className="flex flex-col justify-around py-2">
+            <div className="flex flex-col py-4">
                 <div className="flex pb-4 justify-center">
                     <div className="text-md self-center text-gray-800">
                         Game:
@@ -94,14 +95,14 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                         }
                     </div>
                 </div>
-                <button onClick={leaveGame} className="primary" >Leave Game</button>
+                <button onClick={leaveGame} className="primary-cancel w-4/6 self-center" >Leave Game</button>
                 {
                     !isTurn &&
-                    <button onClick={selectCards} className={`primary my-2 ${selectCardsBtnClasses}`}>Select Cards</button>
+                    <button onClick={selectCards} className={`primary w-4/6 self-center my-2 ${selectCardsBtnClasses}`}>Select Cards</button>
                 }
                 {
                     isTurn && 
-                    <button onClick={chooseWinner} className={`primary my-2`}>Pick Winner</button>
+                    <button onClick={chooseWinner} className={`primary w-4/6 self-center my-2`}>Pick Winner</button>
                 }
                 <GamePlayers/>
             </div>
@@ -110,8 +111,8 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     
     const showGameControls = () => {
         return (
-            <div className="flex justify-around py-2">
-                <button onClick={createGame} className="primary" >Create Game</button>
+            <div className="flex flex-col py-4 w-full">
+                <button onClick={createGame} className="primary w-4/6 self-center" >Create Game</button>
                 <JoinGameModal buttonLabel="Join Game" title="Enter A Game Name" confirmBtnLabel="Join" inputLabel="Name" confirmCallback={join}/>
             </div>
         );

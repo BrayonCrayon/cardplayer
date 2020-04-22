@@ -12,8 +12,8 @@ const BlackCard = (props) => {
     };
 
     return (
-        <div className="flex w-1/4 h-64">
-            <div className="bg-black text-white font-bold rounded h-48 w-5/6 p-2 ">
+        <div className="flex w-1/4 h-56">
+            <div className="bg-black text-white font-bold rounded h-56 w-5/6 p-2 ">
                 {
                     showBlackCard()
                 }

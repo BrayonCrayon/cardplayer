@@ -31,7 +31,7 @@ export const GameList = () => {
     };
 
     return (
-        <div className="w-3/4 flex flex-col justify-center ">
+        <div className="w-3/4 flex flex-col justify-center rounded bg-white">
             <div className="text-4xl font-bold pl-4 py-2">
                 Games
             </div>
@@ -40,7 +40,7 @@ export const GameList = () => {
                     Name
                 </div>
             </div>
-            <div className="h-88 overflow-auto shadow-inner bg-white rounded py-2 px-2">
+            <div className="h-150 overflow-auto shadow-inner bg-white rounded py-2 px-2">
                 {
                     displayGameList()
                 }
