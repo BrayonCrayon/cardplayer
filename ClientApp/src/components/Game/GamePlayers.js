@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 const GamePlayers = ({players}) => {
 
     return (
-        <div className="shadow-md flex flex-col m-4 bg-white rounded">
+        <div className="shadow-md flex flex-col w-full bg-white rounded md:w-1/2 lg:m-4 lg:w-full">
             <div className="h-72 m-2">
                 <div className="text-black text-xl m-2">
                     Players

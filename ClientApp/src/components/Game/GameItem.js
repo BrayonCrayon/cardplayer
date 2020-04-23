@@ -15,14 +15,14 @@ const GameItem = (props) => {
     }, [game, props.user, props.token, dispatch]);
     
     return (
-        <div className="w-full flex flex-wrap justify-between py-2 border-dashed border-b-2 border-gray-500 ">
-            <div className="flex justify-center text-lg w-1/4">
-                <div className="font-semibold">
+        <div className="w-full flex flex-wrap justify-between py-2 border-dashed border-b-2 border-gray-500 md:justify-around">
+            <div className="flex justify-center text-md w-1/2 lg:text-lg">
+                <div className="font-semibold self-center">
                     {game.name}
                 </div>
             </div>
-            <div className="w-1/4">
-                <button className="secondary" onClick={continueGame} >Continue</button>
+            <div className="w-1/2 md:w-1/4 flex justify-end sm:justify-center">
+                <button className="secondary text-sm md:text-md" onClick={continueGame} >Continue</button>
             </div>
         </div>
     )

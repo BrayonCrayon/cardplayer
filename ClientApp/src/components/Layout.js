@@ -6,9 +6,9 @@ export class Layout extends Component {
 
   render () {
     return (
-      <div>
+      <div className="h-screen">
         <NavMenu />
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full ">
           {this.props.children}
         </div>
       </div>

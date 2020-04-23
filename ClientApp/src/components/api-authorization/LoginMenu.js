@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { NavItem, NavLink } from 'reactstrap';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
@@ -49,11 +50,11 @@ export class LoginMenu extends Component {
 
     authenticatedView(userName, appPaths) {
         return (<Fragment>
-            <NavItem>
-                <NavLink href={appPaths.profilePath} className="text-black text-lg font-semibold hover:text-purple-800" to={appPaths.profilePath}>{userName}</NavLink>
+            <NavItem className="self-center">
+                <NavLink href={appPaths.profilePath} tag={Link} className="text-black text-lg font-semibold hover:text-purple-800" to={appPaths.profilePath}>{userName}</NavLink>
             </NavItem>
-            <NavItem>
-                <NavLink href={appPaths.logoutPath} className="text-black text-lg font-semibold hover:text-purple-800" to={appPaths.logoutPath}>Logout</NavLink>
+            <NavItem className="self-center">
+                <NavLink href={appPaths.logoutPath} tag={Link} className="text-black text-lg font-semibold hover:text-purple-800" to={appPaths.logoutPath}>Logout</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -61,11 +62,11 @@ export class LoginMenu extends Component {
 
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
-            <NavItem>
-                <NavLink href={registerPath} className="text-black text-lg font-semibold hover:text-purple-800" to={registerPath}>Register</NavLink>
+            <NavItem className="self-center">
+                <NavLink href={registerPath} tag={Link} className="text-black text-lg font-semibold hover:text-purple-800" to={registerPath}>Register</NavLink>
             </NavItem>
-            <NavItem>
-                <NavLink href={loginPath} className="text-black text-lg font-semibold hover:text-purple-800" to={loginPath}>Login</NavLink>
+            <NavItem className="self-center">
+                <NavLink href={loginPath} tag={Link} className="text-black text-lg font-semibold hover:text-purple-800" to={loginPath}>Login</NavLink>
             </NavItem>
         </Fragment>);
     }

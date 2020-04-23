@@ -13,24 +13,26 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
     }, [dispatch]);
     
     useMemo(() => {
-        setPickedCards(new Map());
-    }, [isTurn, selectedPlayerCards]);
-    
-    selectedPlayerCards.forEach((item) => {
-        const cards = pickedCards.get(item.user.userName);
-        if (cards !== undefined) {
-            if (cards.find(value => value.id === item.id) === undefined) {
-                cards.push(item);
+        const playerCardsMap = new Map();
+        selectedPlayerCards.forEach((item) => {
+            const cards = playerCardsMap.get(item.user.userName);
+            if (cards !== undefined) {
+                if (cards.find(value => value.id === item.id) === undefined) {
+                    cards.push(item);
+                }
             }
-        }
-        else {
-            pickedCards.set(item.user.userName, [item]);
-        }
+            else {
+                playerCardsMap.set(item.user.userName, [item]);
+            }
 
-    });
+        });
+        setPickedCards(playerCardsMap);
+    }, [selectedPlayerCards, setPickedCards]);
+    
+
 
     return (
-      <div className="w-3/4 bg-white rounded p-2 h-64">
+      <div className="w-full bg-white rounded p-2 h-64 my-4 lg:w-3/4 lg:m-0">
           <div className="text-xs font-semibold">
               Selected Cards
           </div>
@@ -50,7 +52,7 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
                               <div className="w-full flex flex-wrap justify-center">
                                   {
                                       pickedCards.get(userName).map(whiteCard => (
-                                          <div key={whiteCard.id} className="border border-black shadow-md rounded bg-white m-1 h-40 p-2 w-1/3" dangerouslySetInnerHTML={{__html: whiteCard.card.text }} />
+                                          <div key={whiteCard.id} className="border border-black shadow-md rounded bg-white m-1 h-40 p-2 w-3/4 md:w-1/3" dangerouslySetInnerHTML={{__html: whiteCard.card.text }} />
                                       ))
                                   }
                               </div>

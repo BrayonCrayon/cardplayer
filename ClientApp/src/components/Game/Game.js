@@ -23,8 +23,8 @@ const Game = ({gameSelected}) => {
 
     function playGame() {
         return (
-            <div className="w-3/4 flex flex-col justify-center">
-                <div className="w-full flex flex-wrap">
+            <div className="w-full flex flex-col justify-center lg:w-3/4">
+                <div className="w-full flex flex-col lg:flex-wrap lg:flex-row">
                     <BlackCard />
                     <SelectedCards/>
                 </div>
@@ -34,7 +34,7 @@ const Game = ({gameSelected}) => {
     }
     
     return (
-      <div className="flex justify-center self-center bg-gray-200 rounded p-4 my-2 w-3/4 shadow-md">
+      <div className="flex flex-col-reverse justify-center self-center bg-gray-200 rounded p-4 my-2 w-3/4 shadow-md lg:flex-row">
           {
               Object.keys( gameSelected).length > 0
               ? playGame()

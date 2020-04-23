@@ -23,7 +23,7 @@ export const JoinGameModal = ({buttonLabel, title, confirmBtnLabel, confirmCallb
     }, [confirmCallback, toggle, inputVal]);
     
     return (
-      <div className="py-2 w-4/6 self-center">
+      <div className="py-2 w-full self-center sm:w-1/3 lg:w-4/6">
           <button className="primary-secondary w-full" onClick={toggle}>{buttonLabel}</button>
           <Modal isOpen={modal} toggle={toggle} >
               <ModalHeader toggle={toggle}>{title}</ModalHeader>

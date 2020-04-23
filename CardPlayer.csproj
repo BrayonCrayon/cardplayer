@@ -28,6 +28,7 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\.env" />
+    <Content Include="ClientApp\public\images\512px-Cards_Against_Humanity_logo.png" />
     <Content Include="ClientApp\src\actions\authActions.js" />
     <Content Include="ClientApp\src\actions\cardActions.js" />
     <Content Include="ClientApp\src\actions\gameActions.js" />
@@ -57,7 +58,6 @@
     <Content Include="ClientApp\src\store\configureStore.js" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    <None Include="ClientApp\src\scss\custom.css" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations" />

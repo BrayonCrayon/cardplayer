@@ -84,8 +84,8 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     const showPlayerControls = () => {
         return (
 
-            <div className="flex flex-col py-4">
-                <div className="flex pb-4 justify-center">
+            <div className="flex flex-wrap pb-4 md:py-4 lg:flex-col">
+                <div className="flex w-full justify-center md:pb-4">
                     <div className="text-md self-center text-gray-800">
                         Game:
                     </div>
@@ -95,15 +95,17 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                         }
                     </div>
                 </div>
-                <button onClick={leaveGame} className="primary-cancel w-4/6 self-center" >Leave Game</button>
-                {
-                    !isTurn &&
-                    <button onClick={selectCards} className={`primary w-4/6 self-center my-2 ${selectCardsBtnClasses}`}>Select Cards</button>
-                }
-                {
-                    isTurn && 
-                    <button onClick={chooseWinner} className={`primary w-4/6 self-center my-2`}>Pick Winner</button>
-                }
+                <div className="w-full flex flex-wrap justify-center md:w-1/2 lg:w-full lg:mx-4">
+                    <button onClick={leaveGame} className="primary-cancel w-3/4 self-end lg:self-center lg:w-4/6" >Leave Game</button>
+                    {
+                        !isTurn &&
+                        <button onClick={selectCards} className={`primary w-3/4 self-start lg:self-center my-2 lg:w-4/6 ${selectCardsBtnClasses}`}>Select Cards</button>
+                    }
+                    {
+                        isTurn && 
+                        <button onClick={chooseWinner} className={`primary w-3/4 self-start lg:self-center my-2 lg:w-4/6`}>Pick Winner</button>
+                    }
+                </div>
                 <GamePlayers/>
             </div>
         );
@@ -111,8 +113,8 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     
     const showGameControls = () => {
         return (
-            <div className="flex flex-col py-4 w-full">
-                <button onClick={createGame} className="primary w-4/6 self-center" >Create Game</button>
+            <div className="flex flex-wrap p-1 w-full justify-around lg:flex-wrap lg:justify-center lg:py-4">
+                <button onClick={createGame} className="primary w-full self-center sm:w-1/3 lg:w-4/6" >Create Game</button>
                 <JoinGameModal buttonLabel="Join Game" title="Enter A Game Name" confirmBtnLabel="Join" inputLabel="Name" confirmCallback={join}/>
             </div>
         );
@@ -127,7 +129,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
     };
     
   return (
-      <div className="w-1/4">
+      <div className="w-full lg:w-1/4">
           {
               displayUi()
           }

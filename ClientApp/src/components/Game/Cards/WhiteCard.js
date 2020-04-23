@@ -23,7 +23,7 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, pla
     }, [selectedCardCount, playerSelectedCards, blackCard.card.pick, disabled, card, onSelect]);
     
     return (
-        <div className={`border-2 rounded bg-white m-1 h-48 p-2 w-1/5 ${classes} ${selectClasses}  ${selectLimitClasses} `}
+        <div className={`border-2 rounded bg-white m-1 h-48 p-2 w-3/4 md:w-1/3 lg:w-1/5 ${classes} ${selectClasses}  ${selectLimitClasses} `}
             onClick={selectTest}
         >
             <div className="font-bold">

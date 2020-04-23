@@ -25,20 +25,22 @@ export class NavMenu extends Component {
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm border-t-8 border-purple-500 shadow-md mb-3 bg-white" light>
-          <div className="flex w-full">
-            <NavbarBrand className="w-1/2 text-center font-weight-bold text-4xl p-0 hover:text-purple-800" href="/" to="/">The CodeCove Cards</NavbarBrand>
+          <div className="flex flex-wrap w-full justify-between md:flex-auto">
+            <NavbarBrand className="w-3/4 text-center font-weight-bold text-2xl p-0 hover:text-purple-800 sm:m-0 sm:w-1/3 lg:text-4xl" href="/" to="/">The CodeCove Cards</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="w-full flex justify-end" isOpen={!this.state.collapsed} navbar>
-                <ul className="flex m-0">
-                  <NavItem>
+            <Collapse isOpen={!this.state.collapsed} navbar className="md:justify-end">
+              <Navbar className="p-0" navbar>
+                <ul className="flex flex-col m-0 w-full sm:flex-row">
+                  <NavItem className="self-center">
                     <NavLink href="/" className="text-black text-lg font-semibold hover:text-purple-800" to="/">Home</NavLink>
                   </NavItem>
-                  <NavItem>
+                  <NavItem className="self-center">
                     <NavLink href="/game" className="text-black text-lg font-semibold hover:text-purple-800" to="/game">Game</NavLink>
                   </NavItem>
                   <LoginMenu>
                   </LoginMenu>
                 </ul>
+              </Navbar>
             </Collapse>
           </div>
         </Navbar>
