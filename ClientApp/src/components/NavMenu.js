@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Nav } from 'reactstrap';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
@@ -29,7 +29,7 @@ export class NavMenu extends Component {
             <NavbarBrand className="w-3/4 text-center font-weight-bold text-2xl p-0 hover:text-purple-800 sm:m-0 sm:w-1/3 lg:text-4xl" href="/" to="/">The CodeCove Cards</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse isOpen={!this.state.collapsed} navbar className="md:justify-end">
-              <Navbar className="p-0" navbar>
+              <Nav className="p-0" navbar>
                 <ul className="flex flex-col m-0 w-full sm:flex-row">
                   <NavItem className="self-center">
                     <NavLink href="/" className="text-black text-lg font-semibold hover:text-purple-800" to="/">Home</NavLink>
@@ -40,7 +40,7 @@ export class NavMenu extends Component {
                   <LoginMenu>
                   </LoginMenu>
                 </ul>
-              </Navbar>
+              </Nav>
             </Collapse>
           </div>
         </Navbar>
