@@ -1,0 +1,10 @@
+﻿version: '3.4'
+
+services:
+  thecodecovecards:    
+    image: thecodecovecardsapp
+    ports:
+      - '80:80'
+    build:
+      context: ./
+      dockerfile: production.dockerfile
