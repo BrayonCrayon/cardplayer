@@ -9,7 +9,6 @@ COPY ./ClientApp ./ClientApp
 WORKDIR /src/ClientApp
 RUN npm install 
 RUN npm run build
-RUN npm run prod
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
@@ -24,7 +23,5 @@ RUN dotnet publish "CardPlayer.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish ./
-COPY --from=client /src/ClientApp/public ./ClientApp/build
-COPY --from=client /src/ClientApp/dist ./ClientApp/build
-#COPY --from=client /src/ClientApp ./ClientApp
+COPY --from=client /src/ClientApp/build ./ClientApp/build
 ENTRYPOINT ["dotnet", "CardPlayer.dll"]
