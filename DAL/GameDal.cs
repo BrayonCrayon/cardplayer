@@ -3,6 +3,7 @@ using System.Linq;
 using CardPlayer.Data;
 using CardPlayer.Helpers;
 using CardPlayer.Models;
+using CardPlayer.ViewModels;
 
 namespace CardPlayer.DAL
 {
@@ -17,14 +18,23 @@ namespace CardPlayer.DAL
         }
 
 
-        public IEnumerable<Game> GetAllGames()
+        public IEnumerable<Game> GetAllGames(GameViewModel gameVm)
         {
-            return _context.Games;
+            var gameIds = _context.GameUsers.Where(gUser => gUser.UserId == gameVm.userId)
+                .Select(gUser => gUser.GameId)
+                .ToList();
+            return _context.Games.Where(g => gameIds.Contains(g.Id));
         }
 
         public Game GetGameByName(string name)
         {
                 return _context.Games.FirstOrDefault(g => g.Name.Equals(name));
+        }
+
+        public bool IsUserTurn(GameViewModel gameVm)
+        {
+            var gameUser = _context.GameUsers.SingleOrDefault(gUser => gUser.GameId == gameVm.gameId && gUser.UserId == gameVm.userId);
+            return gameUser?.IsTurn ?? false;
         }
         
         public Game StoreGame()
@@ -41,6 +51,14 @@ namespace CardPlayer.DAL
         
         public void AddUserToGame(int gameId, string userId, bool isTurn = false, bool isHost = false)
         {
+            var inGameAlready =
+                _context.GameUsers.SingleOrDefault(gUser => gUser.UserId == userId && gUser.GameId == gameId);
+
+            if (inGameAlready != null)
+            {
+                return;
+            }
+            
             _context.GameUsers.Add(new GameUser
             {
                 GameId = gameId,

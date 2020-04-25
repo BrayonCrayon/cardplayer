@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { NavItem } from 'reactstrap';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
 
@@ -50,11 +50,11 @@ export class LoginMenu extends Component {
 
     authenticatedView(userName, appPaths) {
         return (<Fragment>
-            <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={appPaths.profilePath}>{userName}</NavLink>
+            <NavItem className="self-center">
+                <NavLink tag={Link} className="text-black text-lg font-semibold hover:text-purple-800 text-decoration-none no-underline p-2 md:py-0" to={appPaths.profilePath}>{userName}</NavLink>
             </NavItem>
-            <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={appPaths.logoutPath}>Logout</NavLink>
+            <NavItem className="self-center">
+                <NavLink tag={Link} className="text-black text-lg font-semibold hover:text-purple-800 text-decoration-none no-underline p-2 md:py-0" to={appPaths.logoutPath}>Logout</NavLink>
             </NavItem>
         </Fragment>);
 
@@ -62,11 +62,11 @@ export class LoginMenu extends Component {
 
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
-            <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={registerPath}>Register</NavLink>
+            <NavItem className="self-center">
+                <NavLink  tag={Link} className="text-black text-lg font-semibold hover:text-purple-800 text-decoration-none no-underline p-2 md:py-0" to={registerPath}>Register</NavLink>
             </NavItem>
-            <NavItem>
-                <NavLink tag={Link} className="text-gray-500 hover:text-black" to={loginPath}>Login</NavLink>
+            <NavItem className="self-center">
+                <NavLink  tag={Link} className="text-black text-lg font-semibold hover:text-purple-800 text-decoration-none no-underline p-2 md:py-0" to={loginPath}>Login</NavLink>
             </NavItem>
         </Fragment>);
     }

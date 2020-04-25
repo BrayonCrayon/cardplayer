@@ -28,31 +28,36 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\.env" />
+    <Content Include="ClientApp\public\images\512px-Cards_Against_Humanity_logo.png" />
     <Content Include="ClientApp\src\actions\authActions.js" />
     <Content Include="ClientApp\src\actions\cardActions.js" />
     <Content Include="ClientApp\src\actions\gameActions.js" />
-    <Content Include="ClientApp\src\ApiCalls\GameApiCalls.js" />
     <Content Include="ClientApp\src\components\Game\Cards\BlackCard.js" />
     <Content Include="ClientApp\src\components\Game\Cards\PlayerCards.js" />
+    <Content Include="ClientApp\src\components\Game\Cards\SelectedCards.js" />
+    <Content Include="ClientApp\src\components\Game\Cards\WhiteCard.js" />
     <Content Include="ClientApp\src\components\Game\Game.js" />
     <Content Include="ClientApp\src\components\Game\GameItem.js" />
     <Content Include="ClientApp\src\components\Game\GameList.js" />
     <Content Include="ClientApp\src\components\Game\GameMenu.js" />
     <Content Include="ClientApp\src\components\Game\GamePlayers.js" />
+    <Content Include="ClientApp\src\components\Modals\JoinGameModal.js" />
     <Content Include="ClientApp\src\constants\authConstants.js" />
+    <Content Include="ClientApp\src\constants\cardConstants.js" />
     <Content Include="ClientApp\src\constants\gameConstants.js" />
     <Content Include="ClientApp\src\middleware\logger.js" />
     <Content Include="ClientApp\src\reducers\authReducer.js" />
+    <Content Include="ClientApp\src\reducers\cardReducer.js" />
     <Content Include="ClientApp\src\reducers\gameReducer.js" />
     <Content Include="ClientApp\src\reducers\monitorReducer.js" />
     <Content Include="ClientApp\src\reducers\rootReducer.js" />
     <Content Include="ClientApp\src\sagas\CardSaga.js" />
     <Content Include="ClientApp\src\sagas\gameSaga.js" />
     <Content Include="ClientApp\src\sass\app.scss" />
+    <Content Include="ClientApp\src\SignalRHelpers\GameHub.js" />
     <Content Include="ClientApp\src\store\configureStore.js" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    <None Include="ClientApp\src\scss\custom.css" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations" />
@@ -70,8 +75,8 @@
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+<!--    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />-->
+<!--    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run prod" />-->
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>

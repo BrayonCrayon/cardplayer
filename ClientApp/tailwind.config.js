@@ -1,6 +1,6 @@
 module.exports = {
   prefix: '',
-  important: false,
+  important: true,
   separator: ':',
   theme: {
     screens: {
@@ -60,15 +60,16 @@ module.exports = {
         900: '#744210',
       },
       green: {
-        100: '#f0fff4',
-        200: '#c6f6d5',
-        300: '#9ae6b4',
-        400: '#68d391',
-        500: '#48bb78',
-        600: '#38a169',
-        700: '#2f855a',
-        800: '#276749',
-        900: '#22543d',
+        0: '#EFFCF6',
+        100: '#C6F7E2',
+        200: '#8EEDC7',
+        300: '#65D6AD',
+        400: '#3EBD93',
+        500: '#27AB83',
+        600: '#199473',
+        700: '#147D64',
+        800: '#0C6B58',
+        900: '#014D40',
       },
       teal: {
         100: '#e6fffa',
@@ -104,6 +105,7 @@ module.exports = {
         900: '#3c366b',
       },
       purple: {
+        000: '#FFFAFF',
         100: '#faf5ff',
         200: '#e9d8fd',
         300: '#d6bcfa',
@@ -147,8 +149,12 @@ module.exports = {
       '56': '14rem',
       '64': '16rem',
       '72': '18rem',
+      '75': '75%',
       '80': '20rem',
       '88': '22rem',
+      '96': '24rem',
+      '104': '26rem',
+      '150': '40rem',
     },
     backgroundColor: theme => theme('colors'),
     backgroundPosition: {

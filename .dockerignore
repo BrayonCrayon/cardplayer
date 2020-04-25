@@ -1,0 +1,7 @@
+﻿# .dockerignore
+
+Dockerfile
+bin\
+obj\
+.idea\
+ClientApp\node_modules

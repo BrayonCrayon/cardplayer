@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Nav } from 'reactstrap';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
@@ -25,23 +24,23 @@ export class NavMenu extends Component {
   render () {
     return (
       <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 bg-white" light>
-          <div className="flex w-full">
-            <NavbarBrand className="w-1/2 text-center" tag={Link} to="/">CardPlayer</NavbarBrand>
+        <Navbar className="navbar-expand-sm navbar-toggleable-sm border-t-8 border-purple-500 shadow-md mb-3 bg-white" light>
+          <div className="flex flex-wrap w-full justify-between md:flex-auto">
+            <NavbarBrand className="w-3/4 text-center font-weight-bold text-2xl p-0 hover:text-purple-800 sm:m-0 sm:w-1/3 lg:text-4xl" href="/" to="/">The CodeCove Cards</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="w-full flex justify-end" isOpen={!this.state.collapsed} navbar>
-              <div>
-                <ul className="navbar-nav">
-                  <NavItem>
-                    <NavLink tag={Link} className="text-gray-500 hover:text-black" to="/">Home</NavLink>
+            <Collapse isOpen={!this.state.collapsed} navbar className="md:justify-end">
+              <Nav className="p-0" navbar>
+                <ul className="flex flex-col m-0 w-full sm:flex-row">
+                  <NavItem className="self-center">
+                    <NavLink href="/" className="text-black text-lg font-semibold hover:text-purple-800" to="/">Home</NavLink>
                   </NavItem>
-                  <NavItem>
-                    <NavLink tag={Link} className="text-gray-500 hover:text-black" to="/game">Game</NavLink>
+                  <NavItem className="self-center">
+                    <NavLink href="/game" className="text-black text-lg font-semibold hover:text-purple-800" to="/game">Game</NavLink>
                   </NavItem>
                   <LoginMenu>
                   </LoginMenu>
                 </ul>
-              </div>
+              </Nav>
             </Collapse>
           </div>
         </Navbar>

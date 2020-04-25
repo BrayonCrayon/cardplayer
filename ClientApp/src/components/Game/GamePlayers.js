@@ -1,23 +1,36 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
+import {connect} from "react-redux";
 
-export class GamePlayers extends Component {
+const GamePlayers = ({players}) => {
 
-    render() {
-        return (
-            <div className="shadow-md flex flex-col m-4 bg-white rounded">
-                <div className="h-64 m-2">
-                    <div className="text-black text-xl m-2">
-                        Players
-                    </div>
-                    <div className="h-48 bg-gray-100 text-black text-sm shadow-inner flex justify-center rounded">
-                        <div className="self-center ">
-                            No Players in game
-                        </div>
-                    </div>
+    return (
+        <div className="shadow-md flex flex-col w-full bg-white rounded md:w-1/2 lg:m-4 lg:w-full">
+            <div className="h-72 m-2">
+                <div className="text-black text-xl m-2">
+                    Players
+                </div>
+                <div className="bg-gray-100 text-black text-sm shadow-inner flex flex-col rounded overflow-auto h-56 px-2">
+                    {
+                        players.length && players.map(name => {
+                           return <div key={name} className="w-full border-b border-black p-2">
+                               {name}
+                            </div>
+                        })
+                    }
+                    {
+                        !players.length && <div className="self-center ">
+                                No Players in game
+                            </div>
+                    }
                 </div>
             </div>
-        );
-    }
-    
-    
-}
+        </div>
+    );
+};
+
+const mapStateToProps = state => ({
+   players: state.gameReducer.players, 
+});
+
+
+export default connect(mapStateToProps)(GamePlayers);

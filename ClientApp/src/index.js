@@ -2,21 +2,41 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import {Router } from 'react-router';
 import App from './App';
-import createStore from "./store/configureStore";
+import store from "./store/configureStore";
 import {Provider} from "react-redux";
 //import registerServiceWorker from './registerServiceWorker';
+import {GameHub} from './SignalRHelpers/GameHub';
+import Axios from "axios";
+import {setToken, setUser} from "./actions/authActions";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 
-const store = createStore;
+store.dispatch(setToken());
+store.dispatch(setUser());
+
+Axios.interceptors.request.use((config) => {
+    config.headers['Authorization'] = `Bearer ${store.getState().authReducer.token}`;
+    return config;
+}, (error) => {
+    console.error(error);
+    return Promise.reject(error);
+});
+
+Axios.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+    console.error(error);
+    return Promise.reject(error);
+});
+
+window.gameHub = new GameHub();
 
 ReactDOM.render(
   <BrowserRouter  basename={baseUrl}>
-          <Provider store={store}>
-            <App />
-          </Provider>
+      <Provider store={store}>
+        <App />
+      </Provider>
   </BrowserRouter>,
   document.getElementById('root')
 );
