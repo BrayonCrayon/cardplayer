@@ -16,7 +16,7 @@ export class GameHub {
         this.connection.on("ShowWinner", this.showWinner);
         this.connection.start()
             .then(() => {})
-            .catch(error => console.log(error));
+            .catch(error => console.error(error));
         this.connection.onclose(() => {
             this.connection.start().then().catch();
         });
@@ -37,17 +37,14 @@ export class GameHub {
 
     updatePlayerSelectedCards = () => {
         const gameId = store.getState().gameReducer.game.id;
-        const token = store.getState().authReducer.token;
         store.dispatch(getSelectedPlayerCards({
             gameId,
-            token,
         }));
     };
     
     showWinner = (winnerName) => {
           Swal.fire(`The Winner is ${winnerName}`);
           const gameId = store.getState().gameReducer.game.id;
-          const token = store.getState().authReducer.token;
           const user = store.getState().authReducer.user;
           const whiteCardIds = store.getState().cardReducer.whiteCards
               .filter(whiteCard => {
@@ -61,20 +58,17 @@ export class GameHub {
             user,
             gameId,
             cardIds: whiteCardIds,
-            token,
         }));
         
         store.dispatch(resetGame());
         store.dispatch(resetSelectedCards());
 
         store.dispatch(checkUserTurn({
-            token,
             userId: user.sub,
             gameId,
         }));
         
         store.dispatch(getBlackCard({
-            token,
             gameId,
         }));
     };

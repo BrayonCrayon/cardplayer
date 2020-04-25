@@ -7,7 +7,28 @@ import store from "./store/configureStore";
 import {Provider} from "react-redux";
 //import registerServiceWorker from './registerServiceWorker';
 import {GameHub} from './SignalRHelpers/GameHub';
+import Axios from "axios";
+import {setToken, setUser} from "./actions/authActions";
+
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+
+store.dispatch(setToken());
+store.dispatch(setUser());
+
+Axios.interceptors.request.use((config) => {
+    config.headers['Authorization'] = `Bearer ${store.getState().authReducer.token}`;
+    return config;
+}, (error) => {
+    console.error(error);
+    return Promise.reject(error);
+});
+
+Axios.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+    console.error(error);
+    return Promise.reject(error);
+});
 
 window.gameHub = new GameHub();
 

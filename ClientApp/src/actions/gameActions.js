@@ -32,15 +32,10 @@ export const addGame = (user, token) => {
             dispatch(addGamePending());
             const {data} = await Axios.post("/api/game", {
                 userId: user.sub,
-            },{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
             });
             dispatch(addGameSuccess(data));
             dispatch(checkUserTurn({
                 userId: user.sub,
-                token,
                 gameId: data.id,
             }));
             window.gameHub.joinGame(data.name, user.name);
@@ -68,11 +63,9 @@ export const selectGame = (payload) => {
             await dispatch(checkUserTurn({
                 gameId: payload.game.id,
                 userId: payload.user.sub,
-                token: payload.token,
             }));
             window.gameHub.joinGame(payload.game.name, payload.user.name);
             await dispatch(getSelectedPlayerCards({
-                token: payload.token,
                 gameId: payload.game.id,
             }));
 
@@ -85,7 +78,6 @@ export const selectGame = (payload) => {
                 });
             if (store.getState().gameReducer.isTurn && cardIds.length) {
                 await deleteUsedCards({
-                    token: payload.token,
                     user: payload.user,
                     gameId: payload.game.id,
                     cardIds,
@@ -118,7 +110,7 @@ export function fetchGamesFailure(error) {
     }
 }
 
-export const fetchGames = (userId, token) => {
+export const fetchGames = (userId) => {
     return async dispatch => {
         try {
             dispatch(fetchGamesPending());
@@ -126,9 +118,6 @@ export const fetchGames = (userId, token) => {
             const {data} = await Axios.get("/api/game", {
                 params: {
                     userId,
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
                 }
             });
             dispatch(fetchGamesSuccess(data));
@@ -165,9 +154,6 @@ export const checkUserTurn = (payload) => {
         try {
             dispatch(checkUserTurnPending());
             const {data} = await Axios.get("/api/game/is-turn", {
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
                 params: {
                     userId: payload.userId,
                     gameId: payload.gameId,
@@ -207,9 +193,6 @@ export const joinGame = (payload) => {
         try {
             dispatch(joinGamePending());
             const {data} = await Axios.get(`/api/game/join`, {
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
                 params: {
                     userId: payload.user.sub,
                     gameName: payload.gameName,
@@ -218,11 +201,9 @@ export const joinGame = (payload) => {
             dispatch(joinGameSuccess(data));
             window.gameHub.joinGame(data.name, payload.user.name);
             dispatch(getSelectedPlayerCards({
-                token: payload.token,
                 gameId: data.id,
             }));
             dispatch(checkUserTurn({
-                token: payload.token,
                 userId: payload.user.sub,
                 gameId: data.id,
             }));

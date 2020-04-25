@@ -25,7 +25,7 @@ export function getCardFailure(error) {
 export const getCards = (payload) => {
     return async dispatch => {
         
-        if (!payload.userId && !payload.gameId && !payload.token)
+        if (!payload.userId && !payload.gameId)
             return;
 
         try {
@@ -34,10 +34,7 @@ export const getCards = (payload) => {
                 params: {
                     userId: payload.userId,
                     gameId: payload.gameId,
-                },
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
+                }
             });
             dispatch(getCardSuccess(data));
         }
@@ -130,10 +127,6 @@ export const sendSelectCards = (payload) => {
                 cardIds: payload.cardIds,
                 userId: payload.userId,
                 gameId: payload.game.id,
-            },{
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                }
             });
             
             if (data) {
@@ -177,9 +170,6 @@ export const checkAnyCardsSelected = (payload) => {
         try {
             dispatch(checkAnyCardsSelectedPending());
             const {data} = await Axios.get(`/api/cards/any-selected-cards`, {
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
                 params: {
                     userId: payload.userId,
                     gameId: payload.gameId,
@@ -188,7 +178,6 @@ export const checkAnyCardsSelected = (payload) => {
             dispatch(checkAnyCardsSelectedSuccess(data));
             if (data) {
                 dispatch(getSelectedPlayerCards({
-                    token: payload.token,
                     gameId: payload.gameId,
                 }));
             }
@@ -225,9 +214,6 @@ export const getSelectedPlayerCards = (payload) => {
         try {
             dispatch(getSelectedPlayerCardsPending());
             const {data} = await Axios.get(`/api/cards/selected-cards`, {
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
                 params: {
                     gameId: payload.gameId,
                 }
@@ -272,10 +258,6 @@ export const deleteUsedCards = (payload) => {
                 userId: payload.user.sub,
                 cardIds: payload.cardIds,
                 gameId: payload.gameId,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
             });
             
             dispatch(removeUsedCards(payload.cardIds));
@@ -330,10 +312,6 @@ export const setupNextRound = (payload) => {
                 userId: payload.user.sub,
                 gameId: payload.game.id,
                 cardIds: [payload.blackCardId],
-            },{
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
             });
             dispatch(setupNextRoundSuccess(data));
             dispatch(resetGame());
@@ -371,9 +349,6 @@ export const getBlackCard = (payload) => {
         try {
             dispatch(getBlackCardPending());
             const {data} = await Axios.get(`/api/cards/black-card`,{
-                headers: {
-                    Authorization: `Bearer ${payload.token}`,
-                },
                 params: {
                     gameId: payload.gameId,
                 }
