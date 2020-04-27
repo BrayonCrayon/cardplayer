@@ -2,9 +2,10 @@
 
 services:
   thecodecovecards:    
-    image: thecodecovecardsapp
+    image: brayonderoy/the-code-cove-cards
     ports:
-      - '80:80'
+      - '5000:5000'
+      - '443:443'
     build:
       context: ./
-      dockerfile: production.dockerfile
+      dockerfile: development.dockerfile

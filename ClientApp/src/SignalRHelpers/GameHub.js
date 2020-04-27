@@ -2,24 +2,35 @@
 import {addPlayer, checkUserTurn, removePlayer, resetGame, updatePlayers} from "../actions/gameActions";
 import {deleteUsedCards, getBlackCard, getSelectedPlayerCards, resetSelectedCards} from "../actions/cardActions";
 import Swal from "sweetalert2";
+import {LogLevel} from "@microsoft/signalr";
 
 const signalR = require('@microsoft/signalr');
 
 export class GameHub {
     constructor() {
-        this.connection = new signalR.HubConnectionBuilder().withAutomaticReconnect().withUrl("/gameHub").build();
+        this.connection = new signalR.HubConnectionBuilder()
+            .configureLogging(LogLevel.Critical)
+            .withAutomaticReconnect()
+            .withUrl("/gameHub", {
+                accessTokenFactory: () => localStorage.getItem("token"),
+            }).build();
         
         this.connection.on("PlayerJoined", this.playerJoined);
         this.connection.on("PlayerLeft", this.playerLeft);
         this.connection.on("UpdateActivePlayers", this.updateActivePlayers);
         this.connection.on("UpdatePlayerSelectedCards", this.updatePlayerSelectedCards);
         this.connection.on("ShowWinner", this.showWinner);
-        this.connection.start()
-            .then(() => {})
-            .catch(error => console.error(error));
         this.connection.onclose(() => {
             this.connection.start().then().catch();
         });
+    }
+    
+    connect() {
+        if (this.connection.connectionId === null) {
+            this.connection.start()
+                .then(() => {})
+                .catch();
+        }
     }
     
     playerJoined = (playerName) => {

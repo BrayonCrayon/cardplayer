@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CardPlayer.SignalREndPoints.Hubs
 {
+    [Authorize]
     public class GameHub : Hub
     {
 

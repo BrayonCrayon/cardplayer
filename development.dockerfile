@@ -1,8 +1,8 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
-EXPOSE 5000/TCP
-ENV ASPNETCORE_URLS=http://*:5000
-ENV ASPNETCORE_ENVIRONMENT=production
+EXPOSE 80/TCP
+ENV ASPNETCORE_URLS=http://*:80
+ENV ASPNETCORE_ENVIRONMENT=development
 
 FROM node:10.15-alpine AS client 
 WORKDIR /src
@@ -23,7 +23,7 @@ RUN dotnet publish "CardPlayer.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY nginx/production.pfx .
 COPY --from=publish /app/publish ./
 COPY --from=client /src/ClientApp/build ./ClientApp/build
+RUN ["dotnet", "dev-certs", "https", "--trust"]
 ENTRYPOINT ["dotnet", "CardPlayer.dll"]
