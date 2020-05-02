@@ -8,4 +8,4 @@ services:
       - '443:443'
     build:
       context: ./
-      dockerfile: development.dockerfile
+      dockerfile: production.dockerfile
