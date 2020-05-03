@@ -46,7 +46,7 @@ namespace CardPlayer
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSignalR();
-            
+
             services.AddTransient<GameDal>();
             services.AddTransient<UserCardDal>();
 

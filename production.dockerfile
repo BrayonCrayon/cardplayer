@@ -1,8 +1,10 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 5000/TCP
-ENV ASPNETCORE_URLS=http://*:5000
+ENV ASPNETCORE_URLS=https://*:5000
 ENV ASPNETCORE_ENVIRONMENT=production
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=L^cy8EU4xo84
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=./production.pfx
 
 FROM node:10.15-alpine AS client 
 WORKDIR /src
