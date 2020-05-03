@@ -7559,6 +7559,10 @@ video {
   box-shadow: none !important;
 }
 
+.shadow-ccc_md {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+}
+
 .hover\:shadow-xs:hover {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
@@ -7599,6 +7603,10 @@ video {
   box-shadow: none !important;
 }
 
+.hover\:shadow-ccc_md:hover {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+}
+
 .focus\:shadow-xs:focus {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
@@ -7637,6 +7645,10 @@ video {
 
 .focus\:shadow-none:focus {
   box-shadow: none !important;
+}
+
+.focus\:shadow-ccc_md:focus {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
 }
 
 .fill-current {
@@ -12197,6 +12209,12 @@ video {
 
 .secondary:hover {
   background-color: #a0aec0;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  border-width: 1px !important;
+  border-color: #805ad5 !important;
 }
 
 @media (min-width: 640px) {
@@ -19153,6 +19171,10 @@ video {
     box-shadow: none !important;
   }
 
+  .sm\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .sm\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -19193,6 +19215,10 @@ video {
     box-shadow: none !important;
   }
 
+  .sm\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .sm\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -19231,6 +19257,10 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .sm\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
   }
 
   .sm\:fill-current {
@@ -30676,6 +30706,10 @@ video {
     box-shadow: none !important;
   }
 
+  .md\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .md\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -30716,6 +30750,10 @@ video {
     box-shadow: none !important;
   }
 
+  .md\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .md\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -30754,6 +30792,10 @@ video {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .md\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
   }
 
   .md\:fill-current {
@@ -42199,6 +42241,10 @@ video {
     box-shadow: none !important;
   }
 
+  .lg\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .lg\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -42239,6 +42285,10 @@ video {
     box-shadow: none !important;
   }
 
+  .lg\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .lg\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -42277,6 +42327,10 @@ video {
 
   .lg\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .lg\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
   }
 
   .lg\:fill-current {
@@ -53722,6 +53776,10 @@ video {
     box-shadow: none !important;
   }
 
+  .xl\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .xl\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -53762,6 +53820,10 @@ video {
     box-shadow: none !important;
   }
 
+  .xl\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
   .xl\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -53800,6 +53862,10 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .xl\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
   }
 
   .xl\:fill-current {
