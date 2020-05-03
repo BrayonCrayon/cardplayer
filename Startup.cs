@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using CardPlayer.Data;
 using CardPlayer.Models;
+using CardPlayer.Services;
 using CardPlayer.SignalREndPoints.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +37,12 @@ namespace CardPlayer
                 .AddDbContext<CardPlayerContext>( options => 
                     options.UseNpgsql(Configuration.GetConnectionString("CardPlayerDatabase")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Tokens.ProviderMap.Add("CustomEmailConfirmation", new TokenProviderDescriptor(typeof(CustomEmailConfirmationTokenProvider<ApplicationUser>)));
+                    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -42,6 +50,10 @@ namespace CardPlayer
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+            
+            services.AddTransient<CustomEmailConfirmationTokenProvider<ApplicationUser>>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddControllersWithViews();
             services.AddRazorPages();

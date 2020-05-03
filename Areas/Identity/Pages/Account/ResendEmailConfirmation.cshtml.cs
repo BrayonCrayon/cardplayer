@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -15,7 +14,7 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace CardPlayer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public abstract class ResendEmailConfirmationModel : PageModel
+    public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;

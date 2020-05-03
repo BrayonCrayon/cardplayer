@@ -20,7 +20,8 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;https://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SENDGRID_API_KEY": "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"
       }
     }
   }

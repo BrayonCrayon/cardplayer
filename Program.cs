@@ -1,8 +1,6 @@
-using CardPlayer.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using CardPlayer.Helpers;
-
 
 namespace CardPlayer
 {

@@ -4,11 +4,10 @@
     ViewData["Title"] = "Resend email confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h4>Enter your email.</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="flex flex-wrap p-4 self-center bg-white rounded shadow-lg mx-4">
+    <h1 class="w-full text-center">@ViewData["Title"]</h1>
+    <h4 class="w-full text-center">Enter your email.</h4>
+    <div class="w-full">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -16,7 +15,7 @@
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Resend</button>
+            <button type="submit" class="primary">Resend</button>
         </form>
     </div>
 </div>
