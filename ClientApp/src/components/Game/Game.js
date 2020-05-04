@@ -42,7 +42,7 @@ const Game = ({gameSelected, token}) => {
     }
     
     return (
-      <div className="flex flex-col-reverse justify-center self-center bg-gray-200 rounded p-4 my-2 w-3/4 shadow-md lg:flex-row">
+      <div className="flex flex-col-reverse justify-center self-center bg-gray-300 rounded p-4 my-2 w-3/4 shadow-md lg:flex-row">
           {
               Object.keys( gameSelected).length > 0
               ? playGame()

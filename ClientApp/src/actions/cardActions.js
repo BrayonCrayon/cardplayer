@@ -105,10 +105,10 @@ export function sendSelectedCardsPending() {
     };
 }
 
-export function sendSelectedCardsSuccess(playerSelectedCards) {
+export function sendSelectedCardsSuccess(value) {
     return {
         type: cardConstants.SEND_SELECTED_CARDS_SUCCESS,
-        playerSelectedCards,
+        value,
     };
 }
 
@@ -131,7 +131,7 @@ export const sendSelectCards = (payload) => {
             
             if (data) {
                 dispatch(sendSelectedCardsSuccess(data));
-                window.gameHub.playerSelectedCardsNotify(payload.game.name);
+                await window.gameHub.playerSelectedCardsNotify(payload.game.name);
             } else {
                 dispatch(sendSelectedCardsFailure(data));
             }
@@ -151,10 +151,10 @@ export function checkAnyCardsSelectedPending() {
     };
 }
 
-export function checkAnyCardsSelectedSuccess(playerSelectedCards) {
+export function checkAnyCardsSelectedSuccess(value) {
     return {
         type: cardConstants.CHECK_ANY_CARDS_SELECTED_SUCCESS,
-        playerSelectedCards,
+        value,
     }
 }
 
@@ -195,10 +195,10 @@ export function getSelectedPlayerCardsPending() {
     }
 }
 
-export function getSelectedPlayerCardsSuccess(selectedCards) {
+export function getSelectedPlayerCardsSuccess(cards) {
     return {
         type: cardConstants.GET_SELECTED_PLAYER_CARDS_SUCCESS,
-        selectedCards
+        cards
     }
 }
 
@@ -315,7 +315,7 @@ export const setupNextRound = (payload) => {
             });
             dispatch(setupNextRoundSuccess(data));
             dispatch(resetGame());
-            window.gameHub.tellPlayersTheWinner(payload.game.name, payload.winner);
+            await window.gameHub.tellPlayersTheWinner(payload.game.name, payload.winner);
         } catch (error)
         {
             dispatch(setupNextRoundFailure(error));

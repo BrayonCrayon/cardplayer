@@ -4,7 +4,7 @@ import {FormGroup, Input, Label} from "reactstrap";
 import {setWinner} from "../../../actions/gameActions";
 
 
-const SelectedCards = ({selectedPlayerCards, isTurn}) => {
+const SelectedCards = ({playerSelectedCards, isTurn}) => {
     const dispatch = useDispatch();
     const [pickedCards, setPickedCards] = useState(new Map());
     
@@ -14,7 +14,7 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
     
     useMemo(() => {
         const playerCardsMap = new Map();
-        selectedPlayerCards.forEach((item) => {
+        playerSelectedCards.forEach((item) => {
             const cards = playerCardsMap.get(item.user.userName);
             if (cards !== undefined) {
                 if (cards.find(value => value.id === item.id) === undefined) {
@@ -27,7 +27,7 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
 
         });
         setPickedCards(playerCardsMap);
-    }, [selectedPlayerCards, setPickedCards]);
+    }, [playerSelectedCards, setPickedCards]);
     
 
 
@@ -65,7 +65,7 @@ const SelectedCards = ({selectedPlayerCards, isTurn}) => {
 };
 
 const mapStateToProps = state => ({
-    selectedPlayerCards: state.cardReducer.selectedPlayerCards, 
+    playerSelectedCards: state.cardReducer.playerSelectedCards, 
     isTurn: state.gameReducer.isTurn,
 });
 

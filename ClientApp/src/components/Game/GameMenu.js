@@ -11,35 +11,40 @@ import { resetCards, sendSelectCards, setupNextRound} from "../../actions/cardAc
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
 
-const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelectedCards, winner, isTurn}) => {
+const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, hasPlayerSelectedCards, winner, isTurn, playerSelectedCards}) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.authReducer.user);
     const token = useSelector(state => state.authReducer.token);
 
     const selectCardsBtnClasses = useMemo( () => {
-        return Object.keys(blackCard).length > 0 && !playerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-green-400";
-    }, [selectedCardCount, blackCard, playerSelectedCards]);
+        return Object.keys(blackCard).length > 0 && !hasPlayerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-green-400";
+    }, [selectedCardCount, blackCard, hasPlayerSelectedCards]);
+    
+    const pickWinnerBtnClasses = useMemo( () => {
+        return playerSelectedCards.length > 0 ? '' : 'opacity-25 cursor-not-allowed'; 
+    }, [playerSelectedCards]);
     
     const createGame = useCallback( () => {
         addGame(user, token)(dispatch);
     }, [user, token, dispatch]);
     
     const chooseWinner = useCallback(() => {
+        if (playerSelectedCards.length === 0) return;
+        
         if (!winner.length)
         {
             Swal.fire("You must select a winner first");
+            return;
         }
-        else {
-            setupNextRound({
-                token, 
-                user,
-                blackCardId: blackCard.card.id,
-                game: game,
-                winner,
-            })(dispatch);
-            
-        }
-    }, [winner, token, user, blackCard, game, dispatch]);
+        
+        setupNextRound({
+            token, 
+            user,
+            blackCardId: blackCard.card.id,
+            game: game,
+            winner,
+        })(dispatch);
+    }, [winner, token, user, blackCard, game, dispatch, playerSelectedCards]);
     
     const join = useCallback((name) => {
         joinGame({
@@ -59,18 +64,18 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
             confirmButtonColor: '#38a169',
             cancelButtonColor: '#4a5568',
             confirmButtonText: 'Yes, Leave Game!'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.value) {
                 selectGame({game: {}})(dispatch);
                 resetCards()(dispatch);
-                window.gameHub.leaveGame(game.name, user.name);
+                await window.gameHub.leaveGame(game.name, user.name);
                 resetPlayers()(dispatch);
             }
         })
     }, [game, user, dispatch]);
     
     const selectCards = useCallback(() => {
-        if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick && !playerSelectedCards)
+        if (Object.keys(blackCard).length > 0 && selectedCardCount === blackCard.card.pick && !hasPlayerSelectedCards)
         {
             sendSelectCards({
                 game,
@@ -79,7 +84,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                 cardIds: whiteCards.filter(wc => wc.selected).map(wc => wc.card.id),
             })(dispatch);
         }
-    }, [selectedCardCount, blackCard, user, token, whiteCards, game, playerSelectedCards, dispatch]);
+    }, [selectedCardCount, blackCard, user, token, whiteCards, game, hasPlayerSelectedCards, dispatch]);
     
     const showPlayerControls = () => {
         return (
@@ -103,7 +108,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
                     }
                     {
                         isTurn && 
-                        <button onClick={chooseWinner} className={`primary w-3/4 self-start lg:self-center my-2 lg:w-4/6`}>Pick Winner</button>
+                        <button onClick={chooseWinner} className={`primary w-3/4 self-start lg:self-center my-2 lg:w-4/6 ${pickWinnerBtnClasses}`}>Pick Winner</button>
                     }
                 </div>
                 <GamePlayers/>
@@ -140,11 +145,12 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, playerSelecte
 const mapStateToProps = state => ({
     game: state.gameReducer.game, 
     blackCard: state.cardReducer.blackCard,
-    selectedCardCount: state.cardReducer.selectedCards,
+    selectedCardCount: state.cardReducer.selectedCardCount,
     whiteCards: state.cardReducer.whiteCards,
-    playerSelectedCards: state.cardReducer.playerSelectedCards,
+    hasPlayerSelectedCards: state.cardReducer.hasPlayerSelectedCards,
     winner: state.gameReducer.winner,
     isTurn: state.gameReducer.isTurn,
+    playerSelectedCards: state.cardReducer.playerSelectedCards,
 });
 
 export default connect(mapStateToProps)(GameMenu);

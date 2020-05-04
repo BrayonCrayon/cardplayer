@@ -33,6 +33,7 @@ export class GameHub {
         }
     }
     
+    // In-coming Requests
     playerJoined = (playerName) => {
         store.dispatch(addPlayer(playerName));
         this.updatePlayers(store.getState().gameReducer.game.name);
@@ -85,35 +86,40 @@ export class GameHub {
     };
 
     // Outgoing requests
-    joinGame = (gameName, userName) => {
+    joinGame = async (gameName, userName) => {
+        await this.connect();
         this.connection.invoke("JoinGame", gameName, userName)
             .then(() => {
             })
             .catch();  
     };
     
-    leaveGame = (gameName, userName) => {
+    leaveGame = async (gameName, userName) => {
+        await this.connect();
         this.connection.invoke("LeaveGame", gameName, userName)
             .then(() => {
             })
             .catch();
     };
     
-    updatePlayers = (gameName) => {
+    updatePlayers = async (gameName) => {        
+        await this.connect();
         this.connection.invoke("UpdateActivePlayers", gameName, store.getState().gameReducer.players)
             .then(() => {
             })
             .catch();
     };
     
-    playerSelectedCardsNotify = (gameName) => {
+    playerSelectedCardsNotify = async (gameName) => {
+        await this.connect();
         this.connection.invoke("PlayerSelectedCardsNotify", gameName)
             .then(() => {
             })
             .catch();
     };
     
-    tellPlayersTheWinner = (gameName, winnerName) => {
+    tellPlayersTheWinner = async (gameName, winnerName) => {
+        await this.connect();
         this.connection.invoke("ShowWinner", gameName, winnerName)
             .then(() => {
             })
