@@ -15,7 +15,7 @@ const Game = ({gameSelected, token}) => {
         if (token.length > 0 && window.gameHub === undefined) {
             localStorage.setItem("token", token);
             window.gameHub = new GameHub();
-            window.gameHub.connect();
+            await window.gameHub.connect();
         }
     }, [token]);
     
@@ -31,18 +31,18 @@ const Game = ({gameSelected, token}) => {
 
     function playGame() {
         return (
-            <div className="w-full flex flex-col justify-center lg:w-3/4">
-                <div className="w-full flex flex-col lg:flex-wrap lg:flex-row">
+            <div className="w-full flex flex-wrap-reverse justify-center lg:flex-no-wrap lg:w-3/4">
+                <PlayerCards/>
+                <div className="w-full flex flex-col justify-center lg:flex-wrap lg:w-2/3 lg:flex-row">
                     <BlackCard />
                     <SelectedCards/>
                 </div>
-                <PlayerCards/>
             </div>
         )
     }
     
     return (
-      <div className="flex flex-col-reverse justify-center self-center bg-gray-300 rounded p-4 my-2 w-3/4 shadow-md lg:flex-row">
+      <div className="flex flex-col-reverse justify-center self-center bg-gray-300 rounded p-4 my-2 w-11/12 shadow-md lg:flex-row">
           {
               Object.keys( gameSelected).length > 0
               ? playGame()

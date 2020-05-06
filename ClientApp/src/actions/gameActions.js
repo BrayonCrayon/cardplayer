@@ -224,6 +224,7 @@ export function addPlayerAction(playerName) {
 
 export const addPlayer = (playerName) => {
   return async dispatch => {
+      await dispatch(removePlayer(playerName));
       dispatch(addPlayerAction(playerName));
   } 
 };

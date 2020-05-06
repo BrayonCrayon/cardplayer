@@ -12,7 +12,7 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, has
     }, [card.selected]);
     
     const selectLimitClasses = useMemo(() => {
-        return (selectedCardCount === blackCard.card.pick && !card.selected) ? "cursor-not-allowed shadow-inner border-none hover:shadow-none" : ""; 
+        return (selectedCardCount === blackCard.card.pick && !card.selected) ? "cursor-not-allowed border-none hover:shadow-none opacity-50" : ""; 
     }, [selectedCardCount, blackCard.card.pick, card.selected]);
     
     const selectTest = useCallback(() => {
@@ -23,7 +23,7 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, has
     }, [selectedCardCount, hasPlayerSelectedCards, blackCard.card.pick, disabled, card, onSelect]);
     
     return (
-        <div className={`border-2 rounded bg-white m-1 h-48 p-2 w-3/4 md:w-1/3 lg:w-1/5 ${classes} ${selectClasses}  ${selectLimitClasses} `}
+        <div className={`border-2 rounded bg-white m-1 overflow-y-auto h-48 p-2 w-3/4 ${classes} ${selectClasses}  ${selectLimitClasses} `}
             onClick={selectTest}
         >
             <div className="font-bold">

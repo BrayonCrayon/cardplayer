@@ -17,7 +17,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, hasPlayerSele
     const token = useSelector(state => state.authReducer.token);
 
     const selectCardsBtnClasses = useMemo( () => {
-        return Object.keys(blackCard).length > 0 && !hasPlayerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed hover:bg-green-400";
+        return Object.keys(blackCard).length > 0 && !hasPlayerSelectedCards && selectedCardCount === blackCard.card.pick ? "" : "cursor-not-allowed opacity-25";
     }, [selectedCardCount, blackCard, hasPlayerSelectedCards]);
     
     const pickWinnerBtnClasses = useMemo( () => {
@@ -90,11 +90,11 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, hasPlayerSele
         return (
 
             <div className="flex flex-wrap pb-4 md:py-4 lg:flex-col">
-                <div className="flex w-full justify-center md:pb-4">
+                <div className="flex w-full justify-center md:pb-4 lg:self-center">
                     <div className="text-md self-center text-gray-800">
                         Game:
                     </div>
-                    <div className="text-2xl font-semibold px-2" >
+                    <div className="text-2xl font-semibold px-2 text-center" >
                         {
                             game.name
                         }
