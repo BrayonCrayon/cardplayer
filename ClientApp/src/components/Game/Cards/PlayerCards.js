@@ -3,7 +3,7 @@ import {connect, useDispatch} from "react-redux";
 import {checkAnyCardsSelected, getCards, incrementSelectedCardCount, selectCards} from "../../../actions/cardActions";
 import WhiteCard from "./WhiteCard";
 
-const PlayerCards = ({whiteCards, game, userId, token, isTurn, playerSelectedCards}) => {
+const PlayerCards = ({whiteCards, game, userId, token, isTurn, hasPlayerSelectedCards}) => {
     const dispatch = useDispatch();
     
     const onSelect = useCallback((card) => {
@@ -25,9 +25,11 @@ const PlayerCards = ({whiteCards, game, userId, token, isTurn, playerSelectedCar
     }, [game, userId, token, dispatch]);
     
     return (
-        <div className="flex flex-wrap w-full justify-around">
+        <div className="w-full rounded border-2 border-black shadow-inner overflow-y-auto h-150 mr-4 py-2 lg:w-1/4">
             {whiteCards.length && whiteCards.map(whiteCard => (
-                <WhiteCard card={whiteCard} key={whiteCard.id} disabled={isTurn || playerSelectedCards} selected={whiteCard.selected} onSelect={onSelect} />
+                <div className="flex flex-wrap justify-center">
+                    <WhiteCard card={whiteCard} key={whiteCard.id} disabled={isTurn || hasPlayerSelectedCards} selected={whiteCard.selected} onSelect={onSelect} />
+                </div>
             ))}
             {!whiteCards.length && 
                 <div className="text-lg text-center">
@@ -44,7 +46,7 @@ const mapStateToProps = state => ({
     token: state.authReducer.token,
     userId: state.authReducer.user.sub,
     isTurn: state.gameReducer.isTurn,
-    playerSelectedCards: state.cardReducer.playerSelectedCards,
+    hasPlayerSelectedCards: state.cardReducer.hasPlayerSelectedCards,
 });
 
 export default connect(mapStateToProps)(PlayerCards);

@@ -36,3 +36,10 @@
     @apply bg-gray-500;
   }
 }
+
+.form-control {
+  
+  &:focus {
+     @apply shadow-ccc_md border border-purple-600 #{!important};
+  }
+}

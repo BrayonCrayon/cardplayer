@@ -7559,6 +7559,13 @@ video {
   box-shadow: none !important;
 }
 
+<<<<<<< HEAD
+=======
+.shadow-ccc_md {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+}
+
+>>>>>>> 1.2.0
 .hover\:shadow-xs:hover {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
@@ -7599,6 +7606,13 @@ video {
   box-shadow: none !important;
 }
 
+<<<<<<< HEAD
+=======
+.hover\:shadow-ccc_md:hover {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+}
+
+>>>>>>> 1.2.0
 .focus\:shadow-xs:focus {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
@@ -7639,6 +7653,13 @@ video {
   box-shadow: none !important;
 }
 
+<<<<<<< HEAD
+=======
+.focus\:shadow-ccc_md:focus {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+}
+
+>>>>>>> 1.2.0
 .fill-current {
   fill: currentColor !important;
 }
@@ -12199,6 +12220,15 @@ video {
   background-color: #a0aec0;
 }
 
+<<<<<<< HEAD
+=======
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  border-width: 1px !important;
+  border-color: #805ad5 !important;
+}
+
+>>>>>>> 1.2.0
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute !important;
@@ -19153,6 +19183,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .sm\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .sm\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -19193,6 +19230,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .sm\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .sm\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -19233,6 +19277,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .sm\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .sm\:fill-current {
     fill: currentColor !important;
   }
@@ -30676,6 +30727,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .md\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .md\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -30716,6 +30774,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .md\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .md\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -30756,6 +30821,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .md\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .md\:fill-current {
     fill: currentColor !important;
   }
@@ -42199,6 +42271,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .lg\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .lg\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -42239,6 +42318,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .lg\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .lg\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -42279,6 +42365,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .lg\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .lg\:fill-current {
     fill: currentColor !important;
   }
@@ -53722,6 +53815,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .xl\:shadow-ccc_md {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .xl\:hover\:shadow-xs:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -53762,6 +53862,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .xl\:hover\:shadow-ccc_md:hover {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .xl\:focus\:shadow-xs:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
@@ -53802,6 +53909,13 @@ video {
     box-shadow: none !important;
   }
 
+<<<<<<< HEAD
+=======
+  .xl\:focus\:shadow-ccc_md:focus {
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.5) !important;
+  }
+
+>>>>>>> 1.2.0
   .xl\:fill-current {
     fill: currentColor !important;
   }

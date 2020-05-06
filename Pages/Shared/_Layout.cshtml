@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Mvc.ViewEngines
+@inject IWebHostEnvironment Environment
+@inject ICompositeViewEngine Engine
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - The CodeCove Cards</title>
+    <link type="text/css" href="~/css/app.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="~/Identity/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="bg-purple-0 flex flex-col h-screen">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light navbar-toggleable-sm  border-t-8 border-purple-500 shadow-md mb-3 bg-white">
+            <div class="flex flex-wrap w-full">
+                <a class="navbar-brand w-3/4 text-center font-weight-bold text-2xl p-0 hover:text-purple-800 sm:m-0 sm:w-1/3 lg:text-4xl" href="~/">The CodeCove Cards</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse w-1/4">
+                    @{
+                        var result = Engine.FindView(ViewContext, "_LoginPartial", isMainPage: false);
+                    }
+                    @if (result.Success)
+                    {
+                        await Html.RenderPartialAsync("_LoginPartial");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("The default Identity UI layout requires a partial view '_LoginPartial' " +
+                            "usually located at '/Pages/_LoginPartial' or at '/Views/Shared/_LoginPartial' to work. Based on your configuration " +
+                            $"we have looked at it in the following locations: {System.Environment.NewLine}{string.Join(System.Environment.NewLine, result.SearchedLocations)}.");
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3 flex flex-grow w-full justify-center">
+        @RenderBody()
+    </main>
+    <footer class="w-full text-center text-black py-4">
+            &copy; 2020 - The CodeCove Cards - <a asp-area="" asp-page="Privacy">Privacy</a>
+    </footer>
+    <script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Identity/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

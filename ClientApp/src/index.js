@@ -6,7 +6,6 @@ import App from './App';
 import store from "./store/configureStore";
 import {Provider} from "react-redux";
 //import registerServiceWorker from './registerServiceWorker';
-import {GameHub} from './SignalRHelpers/GameHub';
 import Axios from "axios";
 import {setToken, setUser} from "./actions/authActions";
 
@@ -30,7 +29,6 @@ Axios.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
-window.gameHub = new GameHub();
 
 ReactDOM.render(
   <BrowserRouter  basename={baseUrl}>

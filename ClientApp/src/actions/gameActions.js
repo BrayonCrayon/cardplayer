@@ -38,7 +38,7 @@ export const addGame = (user, token) => {
                 userId: user.sub,
                 gameId: data.id,
             }));
-            window.gameHub.joinGame(data.name, user.name);
+            await window.gameHub.joinGame(data.name, user.name);
         } catch (error) {
             console.error(error);
             dispatch(addGameFailure(error));
@@ -64,12 +64,12 @@ export const selectGame = (payload) => {
                 gameId: payload.game.id,
                 userId: payload.user.sub,
             }));
-            window.gameHub.joinGame(payload.game.name, payload.user.name);
+            await window.gameHub.joinGame(payload.game.name, payload.user.name);
             await dispatch(getSelectedPlayerCards({
                 gameId: payload.game.id,
             }));
 
-            const cardIds = store.getState().cardReducer.selectedPlayerCards
+            const cardIds = store.getState().cardReducer.playerSelectedCards
                 .filter(whiteCard => {
                     return whiteCard.user.id === payload.user.sub;
                 })
@@ -199,7 +199,7 @@ export const joinGame = (payload) => {
                 }
             });
             dispatch(joinGameSuccess(data));
-            window.gameHub.joinGame(data.name, payload.user.name);
+            await window.gameHub.joinGame(data.name, payload.user.name);
             dispatch(getSelectedPlayerCards({
                 gameId: data.id,
             }));
@@ -224,6 +224,7 @@ export function addPlayerAction(playerName) {
 
 export const addPlayer = (playerName) => {
   return async dispatch => {
+      await dispatch(removePlayer(playerName));
       dispatch(addPlayerAction(playerName));
   } 
 };

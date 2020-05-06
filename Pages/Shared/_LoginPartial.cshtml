@@ -12,25 +12,17 @@
     }
 }
 
-<ul class="navbar-nav ">
+<div class="w-full flex flex-col justify-center md:justify-end md:flex-row">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link text-black hover:text-purple-500" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
-                <button type="submit" class="nav-link btn btn-link text-gray-500 hover:text-black">Logout</button>
-            </form>
-        </li>
+        <a class="nav-link text-black hover:text-purple-500 font-semibold text-lg text-center md:text-start" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+            <button type="submit" class="nav-link text-black hover:text-purple-500 font-semibold text-lg text-center md:text-start">Logout</button>
+        </form>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-black hover:text-purple-500 font-semibold text-lg" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@returnUrl">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"asp-route-returnUrl="@returnUrl">Login</a>
-        </li>
+        <a class="nav-link text-black hover:text-purple-500 font-semibold text-lg text-center md:text-start" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@returnUrl">Register</a>
+        <a class="nav-link text-black hover:text-purple-500 font-semibold text-lg text-center md:text-start" asp-area="Identity" asp-page="/Account/Login"asp-route-returnUrl="@returnUrl">Login</a>
     }
-</ul>
+</div>

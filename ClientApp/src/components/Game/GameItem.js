@@ -6,8 +6,8 @@ const GameItem = (props) => {
     const dispatch = useDispatch();
     const game = props.game;
 
-    const continueGame = useCallback(() => {
-        selectGame({
+    const continueGame = useCallback(async () => {
+        await selectGame({
             game,
             user: props.user,
             token: props.token,

@@ -7,7 +7,12 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using CardPlayer.Data;
 using CardPlayer.Models;
+using CardPlayer.Services;
 using CardPlayer.SignalREndPoints.Hubs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +37,12 @@ namespace CardPlayer
                 .AddDbContext<CardPlayerContext>( options => 
                     options.UseNpgsql(Configuration.GetConnectionString("CardPlayerDatabase")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Tokens.ProviderMap.Add("CustomEmailConfirmation", new TokenProviderDescriptor(typeof(CustomEmailConfirmationTokenProvider<ApplicationUser>)));
+                    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -40,14 +50,24 @@ namespace CardPlayer
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+            
+            services.AddTransient<CustomEmailConfirmationTokenProvider<ApplicationUser>>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSignalR();
-            
+
             services.AddTransient<GameDal>();
             services.AddTransient<UserCardDal>();
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+                {
+                    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                    options.KnownNetworks.Clear();
+                    options.KnownProxies.Clear();
+                });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -73,22 +93,27 @@ namespace CardPlayer
 
             app.UseRouting();
             
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<GameHub>("/gameHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<GameHub>("/gameHub");
             });
 
             app.UseSpa(spa =>
