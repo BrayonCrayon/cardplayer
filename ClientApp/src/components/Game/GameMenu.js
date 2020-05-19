@@ -10,6 +10,7 @@ import {
 import { resetCards, sendSelectCards, setupNextRound} from "../../actions/cardActions";
 import Swal from "sweetalert2";
 import {JoinGameModal} from "../Modals/JoinGameModal";
+import ShowWinnerModal from "../Modals/ShowWinnerModal";
 
 const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, hasPlayerSelectedCards, winner, isTurn, playerSelectedCards}) => {
     const dispatch = useDispatch();
@@ -111,6 +112,7 @@ const GameMenu = ({selectedCardCount, blackCard, game, whiteCards, hasPlayerSele
                         <button onClick={chooseWinner} className={`primary w-3/4 self-start lg:self-center my-2 lg:w-4/6 ${pickWinnerBtnClasses}`}>Pick Winner</button>
                     }
                 </div>
+                <ShowWinnerModal/>
                 <GamePlayers/>
             </div>
         );

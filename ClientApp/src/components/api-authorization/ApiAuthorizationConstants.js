@@ -1,5 +1,7 @@
 export const ApplicationName = 'CardPlayer';
 
+export const BaseUrl = 'www.thecodecovecards.ca';
+
 export const QueryParameterNames = {
   ReturnUrl: 'returnUrl',
   Message: 'message'

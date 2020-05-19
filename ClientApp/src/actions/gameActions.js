@@ -2,7 +2,7 @@
 
 import * as gameConstants from "../constants/gameConstants";
 import Axios from "axios";
-import {deleteUsedCards, getSelectedPlayerCards, removeSelectedCards} from "./cardActions";
+import {deleteUsedCards, getSelectedPlayerCards, incrementSelectedCardCount, removeSelectedCards} from "./cardActions";
 import store from "../store/configureStore";
 
 // ADDING GAMES
@@ -26,7 +26,7 @@ export function addGameFailure(error) {
     }
 }
 
-export const addGame = (user, token) => {
+export const addGame = (user) => {
     return async dispatch => {
         try {
             dispatch(addGamePending());
@@ -39,6 +39,9 @@ export const addGame = (user, token) => {
                 gameId: data.id,
             }));
             await window.gameHub.joinGame(data.name, user.name);
+            dispatch(getActivePlayer({
+                gameId: data.id,
+            }))
         } catch (error) {
             console.error(error);
             dispatch(addGameFailure(error));
@@ -69,6 +72,10 @@ export const selectGame = (payload) => {
                 gameId: payload.game.id,
             }));
 
+            dispatch(getActivePlayer({
+                gameId: payload.game.id,
+            }));
+
             const cardIds = store.getState().cardReducer.playerSelectedCards
                 .filter(whiteCard => {
                     return whiteCard.user.id === payload.user.sub;
@@ -83,6 +90,9 @@ export const selectGame = (payload) => {
                     cardIds,
                 })(dispatch);
                 await dispatch(removeSelectedCards(cardIds));
+            }
+            else {
+                dispatch(incrementSelectedCardCount(cardIds.length));
             }
         }
     }
@@ -200,9 +210,16 @@ export const joinGame = (payload) => {
             });
             dispatch(joinGameSuccess(data));
             await window.gameHub.joinGame(data.name, payload.user.name);
-            dispatch(getSelectedPlayerCards({
+            await dispatch(getSelectedPlayerCards({
                 gameId: data.id,
             }));
+            dispatch(getActivePlayer({
+                gameId: data.id,
+            }));
+            const count = store.getState().cardReducer
+                .playerSelectedCards
+                .filter(card => card.user.userName === payload.user.name).length;
+            dispatch(incrementSelectedCardCount(count));
             dispatch(checkUserTurn({
                 userId: payload.user.sub,
                 gameId: data.id,
@@ -284,6 +301,20 @@ export const setWinner = (name) => {
     } 
 };
 
+// Set winner cards for game
+export function setWinnerCardsAction(cards) {
+    return {
+        type: gameConstants.SET_WINNER_CARDS,
+        cards,
+    }
+}
+
+export const setWinnerCards = (cards) => {
+    return async dispatch => {
+        dispatch(setWinnerCardsAction(cards));
+    }
+};
+
 // RESET game for next round
 export function resetGameAction() {
     return {
@@ -294,5 +325,43 @@ export function resetGameAction() {
 export const resetGame = () => {
     return async dispatch => {
         dispatch(resetGameAction());      
+    }
+};
+
+// GET active player in current game
+export function getActivePlayerPending() {
+    return {
+        type: gameConstants.GET_ACTIVE_PLAYER_PENDING
+    }
+}
+
+export function getActivePlayerSuccess(activePlayer) {
+    return {
+        type: gameConstants.GET_ACTIVE_PLAYER_SUCCESS,
+        activePlayer,
+    }
+}
+
+export function getActivePlayerFailure(error) {
+    return {
+        type: gameConstants.GET_ACTIVE_PLAYER_FAILURE,
+        error,
+    }
+}
+
+export const getActivePlayer = (payload) => {
+    return async dispatch => {
+        try {
+            dispatch(getActivePlayerPending());
+            const {data} = await Axios.get(`/api/game/active-player`, {
+                params: {
+                    gameId: payload.gameId,
+                }
+            });
+            dispatch(getActivePlayerSuccess(data));
+        } catch(error)
+        {
+            dispatch(getActivePlayerFailure(error));
+        }
     }
 };

@@ -7,7 +7,9 @@ const initialState = {
     players: [],
     isTurn: false,
     pending: false,
+    activePlayer: '',
     winner: "",
+    winnerCards: [],
     error: null,
 };
 
@@ -114,11 +116,34 @@ export default function gameReducer(state = initialState, action) {
                 ...state,
                 winner: action.name,  
             };
+        case actions.SET_WINNER_CARDS:
+            return {
+                ...state,
+                winnerCards: action.cards,
+            };
         case actions.RESET_GAME:
             return {
                 ...state,
                 isTurn: false,
-                winner: "",
+                activePlayer: '',
+            };
+        case actions.GET_ACTIVE_PLAYER_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case actions.GET_ACTIVE_PLAYER_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                activePlayer: action.activePlayer,
+                error: null,
+            };
+        case actions.GET_ACTIVE_PLAYER_FAILURE:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
             };
         default:
             return state;

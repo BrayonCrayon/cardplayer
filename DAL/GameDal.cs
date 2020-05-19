@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using CardPlayer.Data;
 using CardPlayer.Helpers;
@@ -17,6 +18,16 @@ namespace CardPlayer.DAL
             _context = context;
         }
 
+        public string GetActivePlayer(GameViewModel gameVm)
+        {
+            var activePlayerName = _context.GameUsers.Include(gUser => gUser.User)
+                .Where(gUser => gUser.GameId == gameVm.gameId)
+                .Where(gUser => gUser.IsTurn)
+                .Select(gUser => gUser.User.UserName)
+                .FirstOrDefault();
+
+            return activePlayerName ?? "";
+        }
 
         public IEnumerable<Game> GetAllGames(GameViewModel gameVm)
         {

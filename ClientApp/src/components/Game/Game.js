@@ -1,15 +1,13 @@
-﻿import React, {useEffect, useMemo} from 'react';
+﻿import React, {useMemo} from 'react';
 import GameMenu from "./GameMenu";
 import PlayerCards from "./Cards/PlayerCards";
 import BlackCard from "./Cards/BlackCard";
-import {useDispatch, connect} from "react-redux";
-import {setToken, setUser} from "../../actions/authActions";
+import {connect} from "react-redux";
 import {GameList} from "./GameList";
 import SelectedCards from "./Cards/SelectedCards";
 import {GameHub} from "../../SignalRHelpers/GameHub";
 
 const Game = ({gameSelected, token}) => {
-    const dispatch = useDispatch();
     
     useMemo(async () => {
         if (token.length > 0 && window.gameHub === undefined) {
@@ -18,11 +16,6 @@ const Game = ({gameSelected, token}) => {
             await window.gameHub.connect();
         }
     }, [token]);
-    
-    useEffect(() => {
-        setToken()(dispatch);
-        setUser()(dispatch);
-    }, [dispatch]);
 
 
     function showUserGames() {
@@ -54,7 +47,7 @@ const Game = ({gameSelected, token}) => {
 };
 
 const mapStateToProps = state => ({
-   gameSelected: state.gameReducer.game,
+    gameSelected: state.gameReducer.game,
     user: state.authReducer.user,
     token: state.authReducer.token,
 });

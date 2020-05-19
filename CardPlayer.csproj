@@ -45,6 +45,7 @@
     <Content Include="ClientApp\src\components\Game\GameMenu.js" />
     <Content Include="ClientApp\src\components\Game\GamePlayers.js" />
     <Content Include="ClientApp\src\components\Modals\JoinGameModal.js" />
+    <Content Include="ClientApp\src\components\Modals\ShowWinnerModal.js" />
     <Content Include="ClientApp\src\constants\authConstants.js" />
     <Content Include="ClientApp\src\constants\cardConstants.js" />
     <Content Include="ClientApp\src\constants\gameConstants.js" />

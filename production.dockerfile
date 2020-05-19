@@ -5,6 +5,7 @@ ENV ASPNETCORE_URLS=https://*:5000
 ENV ASPNETCORE_ENVIRONMENT=production
 ENV ASPNETCORE_Kestrel__Certificates__Default__Password=L^cy8EU4xo84
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=./production.pfx
+ENV SENDGRID_API_KEY=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
 
 FROM node:10.15-alpine AS client 
 WORKDIR /src

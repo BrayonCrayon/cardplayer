@@ -56,6 +56,7 @@ const BlackCard = ({blackCard, selectedCardCount, isTurn, playerSelectedCards}) 
 };
 
 const mapStateToProps = state => ({
+    user: state.authReducer.user,
     blackCard: state.cardReducer.blackCard,
     selectedCardCount: state.cardReducer.selectedCardCount,
     isTurn: state.gameReducer.isTurn,

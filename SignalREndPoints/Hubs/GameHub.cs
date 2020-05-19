@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -31,9 +32,9 @@ namespace CardPlayer.SignalREndPoints.Hubs
             await Clients.Group(gameName).SendAsync("UpdatePlayerSelectedCards");
         }
 
-        public async Task ShowWinner(string gameName, string winnerName)
+        public async Task ShowWinner(string gameName, string winnerName, string[] winnerCards)
         {
-            await Clients.Group(gameName).SendAsync("ShowWinner", winnerName);
+            await Clients.Group(gameName).SendAsync("ShowWinner", winnerName, winnerCards);
         } 
     }
 }
