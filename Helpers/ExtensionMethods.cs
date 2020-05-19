@@ -1,7 +1,5 @@
-﻿using System;
-using CardPlayer.Data;
+﻿using CardPlayer.Data;
 using CardPlayer.Data.Seeders;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +16,9 @@ namespace CardPlayer.Helpers
             using (var scope = serviceScopeFactory.CreateScope())
             {
                 var services = scope.ServiceProvider;
-
+                var appContext = services.GetRequiredService<ApplicationDbContext>();
+                appContext.Database.Migrate();
+                
                 var dbContext = services.GetRequiredService<CardPlayerContext>();
                 SeedData.Initialize(dbContext);
             }

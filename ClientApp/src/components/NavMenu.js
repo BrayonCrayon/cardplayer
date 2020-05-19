@@ -35,7 +35,7 @@ export class NavMenu extends Component {
                     <NavLink href="/" className="text-black text-lg font-semibold hover:text-purple-800" to="/">Home</NavLink>
                   </NavItem>
                   <NavItem className="self-center">
-                    <NavLink href="/game" className="text-black text-lg font-semibold hover:text-purple-800" to="/game">Game</NavLink>
+                    <NavLink href="/games" className="text-black text-lg font-semibold hover:text-purple-800" to="/games">Games</NavLink>
                   </NavItem>
                   <LoginMenu>
                   </LoginMenu>

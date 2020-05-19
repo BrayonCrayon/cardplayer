@@ -167,7 +167,10 @@ export default function cardReducer(state = initialState, action) {
         case actions.RESET_SELECTED_CARDS:
             return {
                 ...state,
+                pending: false,
+                selectedCardCount: 0,
                 playerSelectedCards: [],
+                hasPlayerSelectedCards: false,
             };
         case actions.REMOVE_SELECTED_CARDS:
             return {

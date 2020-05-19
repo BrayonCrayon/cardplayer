@@ -1,7 +1,13 @@
 ﻿import store from '../store/configureStore';
-import {addPlayer, checkUserTurn, removePlayer, resetGame, updatePlayers} from "../actions/gameActions";
+import {
+    addPlayer,
+    checkUserTurn,
+    getActivePlayer,
+    removePlayer,
+    resetGame, setWinner, setWinnerCards,
+    updatePlayers
+} from "../actions/gameActions";
 import {deleteUsedCards, getBlackCard, getSelectedPlayerCards, resetSelectedCards} from "../actions/cardActions";
-import Swal from "sweetalert2";
 import {LogLevel} from "@microsoft/signalr";
 import {ApplicationPaths} from "../components/api-authorization/ApiAuthorizationConstants";
 import {showErrorMsg, showInfoMsg} from "../helpers/DialogPopup";
@@ -9,26 +15,37 @@ import {showErrorMsg, showInfoMsg} from "../helpers/DialogPopup";
 const signalR = require('@microsoft/signalr');
 
 export class GameHub {
+    _hub = {};
+    
     constructor() {
-        this.connection = new signalR.HubConnectionBuilder()
+        this._hub = new signalR.HubConnectionBuilder()
             .configureLogging(LogLevel.Critical)
             .withAutomaticReconnect()
             .withUrl("/gameHub", {
                 accessTokenFactory: () => localStorage.getItem("token"),
             }).build();
 
-        this.connection.on("PlayerJoined", this.playerJoined);
-        this.connection.on("PlayerLeft", this.playerLeft);
-        this.connection.on("UpdateActivePlayers", this.updateActivePlayers);
-        this.connection.on("UpdatePlayerSelectedCards", this.updatePlayerSelectedCards);
-        this.connection.on("ShowWinner", this.showWinner);
-        this.connection.onclose(() => {
-            this.connection.start()
-                .then()
+        this._hub.on("PlayerJoined", this.playerJoined);
+        this._hub.on("PlayerLeft", this.playerLeft);
+        this._hub.on("UpdateActivePlayers", this.updateActivePlayers);
+        this._hub.on("UpdatePlayerSelectedCards", this.updatePlayerSelectedCards);
+        this._hub.on("ShowWinner", this.showWinner);
+        
+        this._hub.onreconnecting(() => {
+        });
+        this._hub.onreconnected(async () => {
+            if (Object.entries(store.getState().gameReducer.game).length) {
+                await this.joinGame(store.getState().gameReducer.game.name, store.getState().authReducer.user.name);
+            }
+        });
+        this._hub.onclose(() => {
+            this._hub.start()
+                .then(() => {
+                })
                 .catch((error) => {
                         if (error.message === "Unauthorized") {
                             showInfoMsg("You've been away a while, don't worry we are auto signing you in :)", 5000);
-                            window.location.href = ApplicationPaths.Login;
+                            window.location.pathname = ApplicationPaths.Login;
                         }
                     }
                 );
@@ -36,27 +53,41 @@ export class GameHub {
     }
 
     async connect() {
+        this._hub.start()
+            .then(() => {
+            })
+            .catch((error) => {
+                if (error.message === "Unauthorized") {
+                    showInfoMsg("You've been away a while, don't worry we are auto signing you in :)", 5000);
+                    window.location.pathname = ApplicationPaths.Login;
+                }
+            });
+    }
+
+    async connectCheck() {
         new Promise((resolve, reject) => {
-            if (this.connection.connectionId === null) {
-                this.connection.start()
+            if (!this.isConnected()) {
+                this._hub.start()
                     .then(() => {
                         return resolve();
                     })
                     .catch((error) => {
                         if (error.message === "Unauthorized") {
                             showInfoMsg("You've been away a while, don't worry we are auto signing you in :)", 5000);
-                            window.location.href = ApplicationPaths.Login;
+                            window.location.pathname = ApplicationPaths.Login;
                         }
                         return reject();
                     });
             }
         });
     }
+    
+    
 
     // In-coming Requests
-    playerJoined = (playerName) => {
+    playerJoined = async (playerName) => {
         store.dispatch(addPlayer(playerName));
-        this.updatePlayers(store.getState().gameReducer.game.name);
+        await this.updatePlayers(store.getState().gameReducer.game.name);
     };
 
     playerLeft = (playerName) => {
@@ -74,8 +105,9 @@ export class GameHub {
         }));
     };
 
-    showWinner = (winnerName) => {
-        Swal.fire(`The Winner is ${winnerName}`);
+    showWinner = async (winnerName, winnerCards) => {
+        await store.dispatch(setWinner(winnerName));
+        await store.dispatch(setWinnerCards(winnerCards));
         const gameId = store.getState().gameReducer.game.id;
         const user = store.getState().authReducer.user;
         const whiteCardIds = store.getState().cardReducer.whiteCards
@@ -103,13 +135,17 @@ export class GameHub {
         store.dispatch(getBlackCard({
             gameId,
         }));
+        
+        store.dispatch(getActivePlayer({
+            gameId
+        }));
     };
 
     // Outgoing requests
     joinGame = async (gameName, userName) => {
-        await this.connect()
+        await this.connectCheck()
             .then(() => {
-                this.connection.invoke("JoinGame", gameName, userName)
+                this._hub.invoke("JoinGame", gameName, userName)
                     .then(() => {
                     })
                     .catch((error) => {
@@ -122,9 +158,9 @@ export class GameHub {
     };
 
     leaveGame = async (gameName, userName) => {
-        await this.connect()
+        await this.connectCheck()
             .then(() => {
-                this.connection.invoke("LeaveGame", gameName, userName)
+                this._hub.invoke("LeaveGame", gameName, userName)
                     .then(() => {
                     })
                     .catch(() => {
@@ -137,9 +173,9 @@ export class GameHub {
     };
 
     updatePlayers = async (gameName) => {
-        await this.connect()
+        await this.connectCheck()
             .then(() => {
-                this.connection.invoke("UpdateActivePlayers", gameName, store.getState().gameReducer.players)
+                this._hub.invoke("UpdateActivePlayers", gameName, store.getState().gameReducer.players)
                     .then(() => {
                     })
                     .catch((error) => {
@@ -152,9 +188,9 @@ export class GameHub {
     };
 
     playerSelectedCardsNotify = async (gameName) => {
-        await this.connect()
+        await this.connectCheck()
             .then(() => {
-                this.connection.invoke("PlayerSelectedCardsNotify", gameName)
+                this._hub.invoke("PlayerSelectedCardsNotify", gameName)
                     .then(() => {
                     })
                     .catch(() => {
@@ -166,10 +202,10 @@ export class GameHub {
             });
     };
 
-    tellPlayersTheWinner = async (gameName, winnerName) => {
-        await this.connect()
+    tellPlayersTheWinner = async (gameName, winnerName, winnerCards) => {
+        await this.connectCheck()
             .then(() => {
-                this.connection.invoke("ShowWinner", gameName, winnerName)
+                this._hub.invoke("ShowWinner", gameName, winnerName, winnerCards)
                     .then(() => {
                     })
                     .catch(() => {
@@ -179,7 +215,16 @@ export class GameHub {
             .catch((error) => {
                 showErrorMsg("Opps Something Went Wrong, Please Refresh Your Page.");
             });
-    }
+    };
+    
+    static get instance() { return gameHub }
+    
+    isConnected() {
+        return GameHub.instance._hub.state === "Connected";
+    };
 }
+
+const gameHub = new GameHub();
+export default gameHub;
 
 

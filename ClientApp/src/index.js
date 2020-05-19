@@ -8,6 +8,9 @@ import {Provider} from "react-redux";
 //import registerServiceWorker from './registerServiceWorker';
 import Axios from "axios";
 import {setToken, setUser} from "./actions/authActions";
+import {history} from "./helpers/History";
+import {showInfoMsg} from "./helpers/DialogPopup";
+import {ApplicationPaths} from "./components/api-authorization/ApiAuthorizationConstants";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 
@@ -18,20 +21,30 @@ Axios.interceptors.request.use((config) => {
     config.headers['Authorization'] = `Bearer ${store.getState().authReducer.token}`;
     return config;
 }, (error) => {
-    console.error(error);
+    console.log(error);
+    if (error.response.status === 401) {
+        console.log("Rerouting to login");
+        showInfoMsg("You've been away a while, don't worry we are auto signing you in :)", 5000);
+        window.location.pathname = ApplicationPaths.Login;
+    }
     return Promise.reject(error);
 });
 
 Axios.interceptors.response.use((response) => {
     return response;
 }, (error) => {
-    console.error(error);
+    console.log(error);
+    if (error.response.status === 401) {
+        console.log("Rerouting to login");
+        showInfoMsg("You've been away a while, don't worry we are auto signing you in :)", 5000);
+        window.location.pathname = ApplicationPaths.Login;
+    }
     return Promise.reject(error);
 });
 
 
 ReactDOM.render(
-  <BrowserRouter  basename={baseUrl}>
+  <BrowserRouter  basename={baseUrl} history={history} >
       <Provider store={store}>
         <App />
       </Provider>

@@ -25,6 +25,12 @@ namespace CardPlayer.Controllers
         {
             return _gameDal.IsUserTurn(gameVm);
         }
+
+        [HttpGet("active-player")]
+        public ActionResult<string> ActivePlayer([FromQuery] GameViewModel gameVm)
+        {
+            return _gameDal.GetActivePlayer(gameVm);
+        }
         
         [HttpGet]
         public IEnumerable<Game> Get([FromQuery] GameViewModel gameVm)

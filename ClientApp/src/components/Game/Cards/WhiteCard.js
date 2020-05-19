@@ -2,7 +2,7 @@
 import {connect} from "react-redux";
 
 
-const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, hasPlayerSelectedCards}) => {
+const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, hasPlayerSelectedCards, cardOrder}) => {
     const classes = useMemo(() => {
         return disabled ? "cursor-not-allowed shadow-inner" : "shadow-md hover:border-black cursor-pointer hover:shadow-lg";
     }, [disabled]);
@@ -23,11 +23,16 @@ const WhiteCard = ({ card, disabled, onSelect, selectedCardCount, blackCard, has
     }, [selectedCardCount, hasPlayerSelectedCards, blackCard.card.pick, disabled, card, onSelect]);
     
     return (
-        <div className={`border-2 rounded bg-white m-1 overflow-y-auto h-48 p-2 w-3/4 ${classes} ${selectClasses}  ${selectLimitClasses} `}
+        <div className={`flex flex-wrap border-2 rounded bg-white m-1 overflow-y-auto h-48 p-2 w-3/4 ${classes} ${selectClasses}  ${selectLimitClasses} `}
             onClick={selectTest}
         >
-            <div className="font-bold">
+            <div className="font-bold w-full">
                 <div dangerouslySetInnerHTML={{__html: card.card.text }} />
+            </div>
+            <div className="w-full self-end text-right">
+                {
+                    cardOrder > 0 && cardOrder 
+                }
             </div>
         </div>
     );

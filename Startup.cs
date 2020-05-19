@@ -1,4 +1,3 @@
-using System;
 using CardPlayer.DAL;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using static System.TimeSpan;
 
 namespace CardPlayer
 {
@@ -57,7 +57,11 @@ namespace CardPlayer
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.ClientTimeoutInterval = FromHours(1);
+                options.KeepAliveInterval = FromMinutes(30);
+            });
 
             services.AddTransient<GameDal>();
             services.AddTransient<UserCardDal>();

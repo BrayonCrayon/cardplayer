@@ -233,3 +233,6 @@ _Pvt_Extensions
 
 # Rider files
 .idea/
+
+# CSS files
+wwwroot/css

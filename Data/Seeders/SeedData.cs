@@ -6,6 +6,7 @@ using CardPlayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Npgsql;
 
 namespace CardPlayer.Data.Seeders
 {
@@ -41,17 +42,15 @@ namespace CardPlayer.Data.Seeders
             {
                 return;
             }
-            
             var jsonString = File.ReadAllText( "./Data/Seeders/cards_against_humanity_cards.json");
             var jsonObj = JObject.Parse(jsonString);
             List<Card> blackCards = JsonConvert.DeserializeObject<List<Card>>(jsonObj.GetValue("blackCards").ToString());
 
-            var blackCardType = _context.CardTypes.Single(type => type.Name == "black"); 
+            var blackCardType = _context.CardTypes.Single(type => type.Name == "black");
             foreach (var blackCard in blackCards)
             {
                 blackCard.TypeId = blackCardType.Id;
                 _context.Cards.Add(blackCard);
-                _context.SaveChanges();
             }
 
 
@@ -64,8 +63,8 @@ namespace CardPlayer.Data.Seeders
                     Text = whiteCardText,
                     TypeId = whiteCardType.Id,
                 });
-                _context.SaveChanges();
             }
+            _context.SaveChanges();
             
             
         }

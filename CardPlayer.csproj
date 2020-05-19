@@ -42,13 +42,16 @@
     <Content Include="ClientApp\src\components\Game\Game.js" />
     <Content Include="ClientApp\src\components\Game\GameItem.js" />
     <Content Include="ClientApp\src\components\Game\GameList.js" />
+    <Content Include="ClientApp\src\components\Game\GameListMenu.js" />
     <Content Include="ClientApp\src\components\Game\GameMenu.js" />
     <Content Include="ClientApp\src\components\Game\GamePlayers.js" />
     <Content Include="ClientApp\src\components\Modals\JoinGameModal.js" />
+    <Content Include="ClientApp\src\components\Modals\ShowWinnerModal.js" />
     <Content Include="ClientApp\src\constants\authConstants.js" />
     <Content Include="ClientApp\src\constants\cardConstants.js" />
     <Content Include="ClientApp\src\constants\gameConstants.js" />
     <Content Include="ClientApp\src\helpers\DialogPopup.js" />
+    <Content Include="ClientApp\src\helpers\History.js" />
     <Content Include="ClientApp\src\middleware\logger.js" />
     <Content Include="ClientApp\src\reducers\authReducer.js" />
     <Content Include="ClientApp\src\reducers\cardReducer.js" />
@@ -62,9 +65,11 @@
     <Content Include="ClientApp\src\store\configureStore.js" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <Content Remove="Data\Seeders\cards_against_humanity_cards.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations" />
+    <Folder Include="nginx" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

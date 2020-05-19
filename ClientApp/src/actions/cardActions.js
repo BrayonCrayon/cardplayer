@@ -1,6 +1,7 @@
 import * as cardConstants from '../constants/cardConstants';
 import Axios from "axios";
 import {resetGame} from "./gameActions";
+import store from "../store/configureStore";
 
 export function getCardPending() {
     return {
@@ -24,21 +25,20 @@ export function getCardFailure(error) {
 
 export const getCards = (payload) => {
     return async dispatch => {
-        
-        if (!payload.userId && !payload.gameId)
+
+        if (Object.entries(store.getState().gameReducer.game).length === 0)
             return;
 
         try {
             dispatch(getCardPending());
-            const {data} = await Axios.get("/api/cards",  {
+            const {data} = await Axios.get("/api/cards", {
                 params: {
                     userId: payload.userId,
                     gameId: payload.gameId,
                 }
             });
             dispatch(getCardSuccess(data));
-        }
-        catch (error) {
+        } catch (error) {
             dispatch(getCardFailure(error));
         }
     }
@@ -68,7 +68,7 @@ export function selectCardAction(cardId) {
 export const selectCards = (cardId) => {
     return async dispatch => {
         dispatch(selectCardAction(cardId));
-    }  
+    }
 };
 
 export const selectWhiteCard = (whiteCards, Id) => {
@@ -94,7 +94,7 @@ export function setSelectedCardCountAction(value) {
 export const incrementSelectedCardCount = (value) => {
     return async dispatch => {
         dispatch(setSelectedCardCountAction(value));
-    } 
+    }
 };
 
 // Call api call to select cards
@@ -128,15 +128,14 @@ export const sendSelectCards = (payload) => {
                 userId: payload.userId,
                 gameId: payload.game.id,
             });
-            
+
             if (data) {
                 dispatch(sendSelectedCardsSuccess(data));
-                await window.gameHub.playerSelectedCardsNotify(payload.game.name);
+                await store.getState().gameReducer.gameHub.playerSelectedCardsNotify(payload.game.name);
             } else {
                 dispatch(sendSelectedCardsFailure(data));
             }
-        } catch (error)
-        {
+        } catch (error) {
             dispatch(sendSelectedCardsFailure(error));
         }
     }
@@ -181,8 +180,7 @@ export const checkAnyCardsSelected = (payload) => {
                     gameId: payload.gameId,
                 }));
             }
-        } catch (error)
-        {
+        } catch (error) {
             dispatch(checkAnyCardsSelectedFailure(error));
         }
     }
@@ -219,8 +217,7 @@ export const getSelectedPlayerCards = (payload) => {
                 }
             });
             dispatch(getSelectedPlayerCardsSuccess(data));
-        } catch (error)
-        {
+        } catch (error) {
             dispatch(getSelectedPlayerCardsFailure(error));
         }
     }
@@ -251,7 +248,7 @@ export const deleteUsedCards = (payload) => {
     return async dispatch => {
         if (payload.cardIds.length === 0)
             return;
-        
+
         try {
             dispatch(deleteUsedCardsPending());
             const {data} = await Axios.post(`/api/cards/delete-used-cards`, {
@@ -259,11 +256,10 @@ export const deleteUsedCards = (payload) => {
                 cardIds: payload.cardIds,
                 gameId: payload.gameId,
             });
-            
+
             dispatch(removeUsedCards(payload.cardIds));
             dispatch(deleteUsedCardsSuccess(data));
-        }
-        catch (error) {
+        } catch (error) {
             dispatch(deleteUsedCardsFailure(error));
         }
     }
@@ -280,7 +276,7 @@ export function removeUsedCardsAction(cardIds) {
 export const removeUsedCards = (cardIds) => {
     return async dispatch => {
         dispatch(removeUsedCardsAction(cardIds));
-    } 
+    }
 };
 
 // Setup next round
@@ -313,11 +309,14 @@ export const setupNextRound = (payload) => {
                 gameId: payload.game.id,
                 cardIds: [payload.blackCardId],
             });
+            const winnerCards = store.getState().cardReducer
+                .playerSelectedCards
+                .filter(playerCard => playerCard.user.userName === payload.winner)
+                .map(playerCard => playerCard.card.text);
+            await store.getState().gameReducer.gameHub.tellPlayersTheWinner(payload.game.name, payload.winner, winnerCards);
             dispatch(setupNextRoundSuccess(data));
             dispatch(resetGame());
-            await window.gameHub.tellPlayersTheWinner(payload.game.name, payload.winner);
-        } catch (error)
-        {
+        } catch (error) {
             dispatch(setupNextRoundFailure(error));
         }
     }
@@ -348,14 +347,13 @@ export const getBlackCard = (payload) => {
     return async dispatch => {
         try {
             dispatch(getBlackCardPending());
-            const {data} = await Axios.get(`/api/cards/black-card`,{
+            const {data} = await Axios.get(`/api/cards/black-card`, {
                 params: {
                     gameId: payload.gameId,
                 }
             });
             dispatch(getBlackCardSuccess(data));
-        } catch (error)
-        {
+        } catch (error) {
             dispatch(getBlackCardFailure(error));
         }
     }
@@ -369,9 +367,9 @@ export function resetSelectedCardsAction() {
 }
 
 export const resetSelectedCards = () => {
-  return async dispatch => {
-      dispatch(resetSelectedCardsAction());
-  } 
+    return async dispatch => {
+        dispatch(resetSelectedCardsAction());
+    }
 };
 
 // remove selected cards

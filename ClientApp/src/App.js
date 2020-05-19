@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import Game from './components/Game/Game';
+import GameList from "./components/Game/GameList";
 import { Home } from './components/Home';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -16,8 +17,9 @@ export default class App extends Component {
 
   render () {
     return (
-      <Layout >
+      <Layout>
         <Route exact path='/' component={Home} />
+        <AuthorizeRoute path="/games" component={GameList} />
         <AuthorizeRoute path="/game" component={Game} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
